@@ -1,5 +1,6 @@
-from bs4 import BeautifulSoup
-import os
+from bs4 import BeautifulSoup # html parsingßß
+import os # file handling
+import re # regex
 
 speaker_indicator = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0"
 csv_file_path = "./data/demon-slayer-transcript.csv"
@@ -25,7 +26,7 @@ class Scene:
 class Action:
     def __init__(self, description):
         self.action_id = action_id + 1
-        self.description = text
+        self.description = description
 
 # Parse the html file to make an array of dialogues, then export to a CSV file
 class Dialogue:
@@ -87,20 +88,31 @@ with open(csv_file_path, "w", encoding="utf-8") as csv_file:
     for i, episode in enumerate(h1_tags):
         # Get the episode number and season
         episode_number = episode.text.split("E.")[1].split("<")[0]
-        season_number = episode.text.split("S.")[1].split("<")[0] #TODO is "1. E.02" instead of just 1
+        season_number = re.search(r"S\.(\d+)", episode.text).group(1)
         scene = None
         action = None
+        dialouge = None
 
         # Get all HTML between the current <h1> and the next <h1>
+        # this issue with this is the h1 is in a div, there is a div for each page, i need it to get 
+        # all the html between the current h1 and the next h1, despite being in different div parents, and several divs being between them
+        # Get all HTML between the current <h1> and the next <h1>, spanning multiple divs
         html_between = []
-        sibling = episode.find_next_sibling()
-        while sibling and (i == len(h1_tags) - 1 or sibling != h1_tags[i + 1]):
-            html_between.append(sibling)
-            sibling = sibling.find_next_sibling()
+        current_element = episode.find_next()
+
+        while current_element:
+            # Stop if we reach the next <h1>
+            if current_element.name == "h1" and current_element != episode:
+                break
+            # Add the current element to the list if it's not empty
+            if current_element.name and current_element.text.strip():
+                html_between.append(current_element)
+            # Move to the next element in the document
+            current_element = current_element.find_next()
 
         # Process the HTML between the <h1> tags
         for line in html_between:
-            if line.name == "p":
+            if line.name == "p" and line.text != "\xa0" and line.text != "":
                 # Check if the line is a scene
                 if "[Scene:" in line.text:
                     scene_description = line.text.split("[Scene:")[1].split("]")[0]
@@ -112,11 +124,18 @@ with open(csv_file_path, "w", encoding="utf-8") as csv_file:
                 # Check if the line contains a speaker and text
                 # TODO - not capturing all text
                 elif speaker_indicator in line.text:
-                    speaker = line.find("b").text.strip()
-                    text = line.text.split(speaker)[1].strip()
-                    preface = text.split("(")[0].strip() if "(" in text else None
-                    dialouge = Dialogue(text, speaker, scene, episode_number, season_number)
-                    dialouges.append(dialouge)
+                    # Split the line by the speaker indicator to handle multiple speakers
+                    parts = line.text.split(speaker_indicator)
+                    for i in range(0, len(parts) - 1, 2):  # Iterate in pairs (speaker, dialogue)
+                        speaker = parts[i].strip()
+                        text = parts[i + 1].strip()
+                        if speaker and text:
+                            preface = text.split("(")[0].strip() if "(" in text else None
+                            dialouge = Dialogue(text, speaker, scene, episode_number, season_number)
+                            dialouges.append(dialouge)
+                elif dialouge is not None:
+                    # Add subsequent lines to the current dialogue
+                    dialouge.text = dialouge.text + "\n" + line.text.strip()
 
 # Turn Dialouge array into a CSV file
 for dialouge in dialouges:
@@ -133,4 +152,12 @@ for dialouge in dialouges:
 
     # Create a new row in the CSV file with the extracted data
     with open(csv_file_path, "a", encoding="utf-8") as csv_file:
-        csv_file.write(f"{text},{speaker},{episode},{season},{preface},{scene},{scene_id},{action},{action_id}\n")
+        csv_file.write(f'"{text.replace("\"", "\"\"")}",'
+                       f'"{speaker.replace("\"", "\"\"")}",'
+                       f'"{episode}",'
+                       f'"{season}",'
+                       f'"{preface.replace("\"", "\"\"") if preface else ""}",'
+                       f'"{scene.replace("\"", "\"\"") if scene else ""}",'
+                       f'"{scene_id if scene_id else ""}",'
+                       f'"{action.replace("\"", "\"\"") if action else ""}",'
+                       f'"{action_id if action_id else ""}"\n')
