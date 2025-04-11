@@ -122,7 +122,6 @@ with open(csv_file_path, "w", encoding="utf-8") as csv_file:
                     action_description = line.text.split("[Action:")[1].split("]")[0]
                     action = Action(action_description)
                 # Check if the line contains a speaker and text
-                # TODO - not capturing all text
                 elif speaker_indicator in line.text:
                     # Split the line by the speaker indicator to handle multiple speakers
                     parts = line.text.split(speaker_indicator)
@@ -130,12 +129,22 @@ with open(csv_file_path, "w", encoding="utf-8") as csv_file:
                         speaker = parts[i].strip()
                         text = parts[i + 1].strip()
                         if speaker and text:
-                            preface = text.split("(")[0].strip() if "(" in text else None
-                            dialouge = Dialogue(text, speaker, scene, episode_number, season_number)
+                            preface = None
+                            # Check if the text starts with '(' indicating a preface
+                            if text.startswith("(") and ")" in text:
+                                preface = text[1:text.index(")")]  # Extract content inside parentheses
+                                text = text[text.index(")") + 1:].strip()  # Remove the preface from the text
+                            dialouge = Dialogue(text, speaker, scene, episode_number, season_number, preface=preface)
                             dialouges.append(dialouge)
                 elif dialouge is not None:
-                    # Add subsequent lines to the current dialogue
-                    dialouge.text = dialouge.text + "\n" + line.text.strip()
+                    # Subsequent lines without speakers are assumed to be the same person
+                    text = line.text.strip()
+                    preface = None
+                    if text.startswith("(") and ")" in text:
+                        preface = text[1:text.index(")")]
+                        text = text[text.index(")") + 1:].strip()
+                    dialouge = Dialogue(text, dialouge.speaker, scene, episode_number, season_number, preface=preface)
+                    dialouges.append(dialouge)
 
 # Turn Dialouge array into a CSV file
 for dialouge in dialouges:
