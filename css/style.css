@@ -4,6 +4,7 @@ body {
     padding: 20px;
     background-color: #260707;
     color:#d6b479;
+    display: flex;
   }
   
   .bottom-right {
@@ -18,3 +19,58 @@ body {
     gold-text: #d6b479;
     shadow-purple: #3e2a56;
     demon-purple: #5e17eb; */
+
+.left-pane {
+  
+  width: 30%;
+  background-color: #f0f0f0;
+  padding: 20px;
+  box-sizing: border-box;
+  border-right: 1px solid #ccc;
+}
+
+.right-pane {
+ 
+  width: 70%;
+  background-color: #ffffff;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+.tab-header {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #eee;
+  cursor: pointer;
+  outline: none;
+  border-right: 1px solid #ccc;
+  font-weight: bold;
+}
+
+.tab-button.active {
+  background-color: #fff;
+  border-bottom: 2px solid #007bff;
+  color: #007bff;
+}
+
+.tab-content {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
+.main-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw; /* <-- Add this */
+  margin: 0;
+}
