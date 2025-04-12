@@ -1,5 +1,6 @@
 window.onload = () => {
     showPopup();
+    createTabs(tabs, renderPlaceholder);
   };
   
   const overlay = document.getElementById("overlay");
@@ -16,3 +17,7 @@ window.onload = () => {
   
   continueBtn.addEventListener("click", hidePopup);
   reopenPopupBtn.addEventListener("click", showPopup);
+
+  
+
+  
