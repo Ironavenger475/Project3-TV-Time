@@ -16,9 +16,13 @@
   border-radius: 10px;
 }
 
+a{
+  color:#d6b479;
+}
 .popup {
   background: #260707;
   padding: 20px;
+  height:56%;
   width: 600px;
   border-radius: 10px;
   box-shadow: 0 0 10px #000;
@@ -29,11 +33,11 @@
   display: none;
 }
 
-.popup-content {
+/* .popup-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
+} */
 
 .popup-text {
   flex: 2;
@@ -51,3 +55,72 @@
   object-fit: contain;
 }
 
+.popup-image1 img {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+}
+.popup-content {
+  max-height: 300px; /* Adjust this based on your needs */
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.popup-text.scrollable {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Wrap image to the right of the first paragraph */
+.text-with-image {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+
+.popup-image img {
+  float: right;
+  max-width: 120px;
+  height: auto;
+  margin-left: 15px;
+  margin-top: 5px;
+}
+
+.popup-image2 {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex-direction: row; /* Ensures image is on the left */
+  margin-bottom: 20px;
+}
+
+.popup-image1 {
+  flex-shrink: 0;
+}
+
+.popup-image2 img {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+}
+
+.text-content {
+  flex: 1;
+  text-align: justify;
+}
+
+.popup-content::-webkit-scrollbar,
+.popup-text.scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+.popup-content,
+.popup-text.scrollable {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.popup-image2 .text-content {
+  text-align: right;
+}
