@@ -21,12 +21,13 @@ a{
 }
 .popup {
   background: #260707;
-  padding: 20px;
-  height:56%;
-  width: 600px;
+  padding: 10px;
+  height:75%;
+  width: 80%;
   border-radius: 10px;
   box-shadow: 0 0 10px #000;
   text-align: center;
+  border-radius: 25px;
 }
 
 .hidden {
@@ -42,6 +43,7 @@ a{
 .popup-text {
   flex: 2;
   text-align: justify;
+  background: #072626;
 }
 
 .popup-image {
@@ -60,9 +62,18 @@ a{
   height: 300px;
   object-fit: contain;
 }
+.popup-inner {
+  padding: 10px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
 .popup-content {
-  max-height: 300px; /* Adjust this based on your needs */
+  max-height: 80%;
   overflow-y: auto;
+  border-radius: 10px;
+  background: #072626;
+  padding-left: 10px;
   padding-right: 10px;
 }
 
@@ -117,8 +128,8 @@ a{
 
 .popup-content,
 .popup-text.scrollable {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;  
+  scrollbar-width: none;     
 }
 
 .popup-image2 .text-content {
