@@ -8,6 +8,7 @@ window.onload = () => {
     showPopup();
     d3.csv('./data/demon-slayer-transcript.csv').then(csvData => {
         data = csvData;
+        console.log(data)
         createTabs(tabs, renderTabContent);
     });
 };
@@ -24,7 +25,7 @@ function renderTabContent(tabName) {
         tabContent.appendChild(wordCloudContainer);
 
         // Initialize the WordCloud object
-        new WordCloud(tabContent, data);
+        new WordCloud(wordCloudContainer, data);
     }
 }
 
