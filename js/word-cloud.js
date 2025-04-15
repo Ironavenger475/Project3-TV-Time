@@ -2,7 +2,7 @@ const cloud = d3Cloud;
 
 class WordCloud {
     constructor(parentDiv, data) {
-        this.maxWordCount = 100; // Maximum number of words to display
+        this.maxWordCount = 200; // Maximum number of words to display
         this.parentDiv = d3.select(parentDiv);
         this.data = this.processData(data); // Process data to calculate word counts
 
@@ -94,6 +94,15 @@ class WordCloud {
                 this.tooltip.style('display', "none");
             })
             .on('mouseover', (event, d) => {
+                this.tooltip.transition()
+                    .duration(200)
+                    .style('opacity', 0.9);
+                this.tooltip.html(`Word: ${d.text}<br>Count: ${d.count}<br>Click to see more`)
+                    .style('left', `${event.pageX}px`)
+                    .style('top', `${event.pageY - 28}px`)
+                    .style('display', "block");
+            })
+            .on('mousemove', (event, d) => {
                 this.tooltip.transition()
                     .duration(200)
                     .style('opacity', 0.9);
