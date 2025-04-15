@@ -27,6 +27,8 @@ body {
   padding: 20px;
   box-sizing: border-box;
   border-right: 1px solid #ccc;
+  border-top-left-radius: 25px; /* Or any other value for radius */
+  border-bottom-left-radius: 25px;
 }
 
 .right-pane {
@@ -35,6 +37,8 @@ body {
   background-color: #ffffff;
   padding: 20px;
   box-sizing: border-box;
+  border-top-right-radius: 25px; /* Or unset if you prefer default sharp corners */
+  border-bottom-right-radius: 25px;
 }
 
 
@@ -73,5 +77,6 @@ body {
   height: 100vh;
   width: 100vw; /* <-- Add this */
   margin: 0;
+  border-radius: 25px;
 }
 
