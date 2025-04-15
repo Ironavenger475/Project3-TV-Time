@@ -1,10 +1,10 @@
-const tabs = ["Word Cloud", "Timeline", "Phrases"];
+export const tabs = ["Word Cloud", "Timeline", "Phrases"];
 
-function renderPlaceholder(tabName) {
+export function renderPlaceholder(tabName) {
   console.log(`Not implemented: ${tabName}`);
 }
 
-function createTabs(tabLabels, renderFunction) {
+export function createTabs(tabLabels, renderFunction) {
   const tabHeader = document.getElementById('tab-header');
   const tabContainer = document.getElementById('tab-container');
 

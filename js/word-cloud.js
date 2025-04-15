@@ -1,18 +1,26 @@
+const cloud = d3Cloud;
+
 class WordCloud {
     constructor(parentDiv, data) {
         this.parentDiv = d3.select(parentDiv);
         this.data = data;
+
+        // Create a new div for the word cloud
+        this.wordCloudDiv = this.parentDiv.append('div')
+            .attr('id', 'word-cloud')
+            .style('width', '100%')
+            .style('height', '100%');
 
         // Initialize the word cloud
         this.init();
     }
 
     init() {
-        // Get the dimensions of the parent div
-        const { width, height } = this.parentDiv.node().getBoundingClientRect();
+        // Get the dimensions of the new word cloud div
+        const { width, height } = this.wordCloudDiv.node().getBoundingClientRect();
 
-        // Create an SVG element
-        this.svg = this.parentDiv.append('svg')
+        // Create an SVG element inside the new div
+        this.svg = this.wordCloudDiv.append('svg')
             .attr('width', width)
             .attr('height', height);
 
@@ -25,7 +33,7 @@ class WordCloud {
     }
 
     render() {
-        const { width, height } = this.parentDiv.node().getBoundingClientRect();
+        const { width, height } = this.wordCloudDiv.node().getBoundingClientRect();
 
         // Create a scale for font sizes
         const fontSizeScale = d3.scaleLinear()
@@ -33,7 +41,7 @@ class WordCloud {
             .range([10, 50]); // Adjust font size range as needed
 
         // Create a D3 cloud layout
-        const layout = d3.layout.cloud()
+        const layout = cloud()
             .size([width, height])
             .words(this.data.map(d => ({ text: d.text, size: fontSizeScale(d.value) })))
             .padding(5)
