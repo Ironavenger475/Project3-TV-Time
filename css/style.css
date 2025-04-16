@@ -74,3 +74,21 @@ body {
   width: 100vw; /* <-- Add this */
   margin: 0;
 }
+
+.tooltip{
+  position:fixed;
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  z-index: 1000;
+  display: none;
+}
+
+/* prevent svg text selection */
+g{
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
