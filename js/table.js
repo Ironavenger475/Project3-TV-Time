@@ -8,44 +8,47 @@ class Table {
         this.init();
     }
 
-    processData(data) {
+    processData() {
         const phraseCount = {};
+        const minWords = 3; // Only phrases with 3+ words
 
         this.data.forEach(row => {
-            const phrase = row.text?.trim();
-            if (phrase) {
-                phraseCount[phrase] = (phraseCount[phrase] || 0) + 1;
+            const text = row.text?.toLowerCase().replace(/[.,!?"]/g, '').trim();
+            if (!text) return;
+
+            const words = text.split(/\s+/);
+            for (let n = minWords; n <= words.length; n++) {
+                for (let i = 0; i <= words.length - n; i++) {
+                    const phrase = words.slice(i, i + n).join(' ');
+                    phraseCount[phrase] = (phraseCount[phrase] || 0) + 1;
+                }
             }
         });
 
+        // Filter to only show common phrases (2+)
         this.tableData = Object.entries(phraseCount)
+            .filter(([_, count]) => count > 1)
             .map(([phrase, count]) => ({ phrase, count }))
-            .filter(d => d.count > 1) // Only show common phrases
-            .sort((a, b) => b.count - a.count); // Descending by count
+            .sort((a, b) => b.count - a.count);
     }
 
     init() {
-        // Add title
         const heading = document.createElement('h3');
         heading.textContent = 'Common Phrases in Demon Slayer';
         this.container.appendChild(heading);
 
-        // Create scrollable container for the table
         const tableContainer = document.createElement('div');
         tableContainer.classList.add('phrase-table-container');
         this.container.appendChild(tableContainer);
 
-        // Create table
         this.table = document.createElement('table');
         this.table.classList.add('phrase-table');
         tableContainer.appendChild(this.table);
 
-        // Create thead
         const thead = document.createElement('thead');
-        thead.innerHTML = '<tr><th>Common Phrase</th><th>Number of Times Said</th></tr>';
+        thead.innerHTML = '<tr><th>Common Phrase</th><th>Occurrences</th></tr>';
         this.table.appendChild(thead);
 
-        // Create tbody
         this.tbody = document.createElement('tbody');
         this.table.appendChild(this.tbody);
 
