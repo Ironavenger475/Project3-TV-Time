@@ -43,7 +43,7 @@ a{
 .popup-text {
   flex: 2;
   text-align: justify;
-  background: #072626;
+  background: #260707;
 }
 
 .popup-image {
@@ -72,7 +72,7 @@ a{
   max-height: 80%;
   overflow-y: auto;
   border-radius: 10px;
-  background: #072626;
+  background: #260707;
   padding-left: 10px;
   padding-right: 10px;
 }
@@ -121,7 +121,7 @@ a{
   text-align: justify;
 }
 
-.popup-content::-webkit-scrollbar,
+/* .popup-content::-webkit-scrollbar,
 .popup-text.scrollable::-webkit-scrollbar {
   display: none;
 }
@@ -130,7 +130,7 @@ a{
 .popup-text.scrollable {
   -ms-overflow-style: none;  
   scrollbar-width: none;     
-}
+} */
 
 .popup-image2 .text-content {
   text-align: right;
