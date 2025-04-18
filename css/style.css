@@ -92,3 +92,27 @@ g{
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
+
+.phrase-table-container {
+  width: 100%;
+  max-height: 650px; 
+  overflow-y: auto;  /* Vertical scrolling */
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+.phrase-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.phrase-table th,
+.phrase-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.phrase-table th {
+  background-color: #f2f2f2;
+}
