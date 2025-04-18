@@ -41,44 +41,6 @@ class Dialogue:
 
 dialouges = []
 
-#### Extract info for each episode
-# Header Format :
-# <h1>Demon<span style='letter-spacing:-.15pt'> </span>Slayer<span
-# style='letter-spacing:-.3pt'> </span>S.1<span style='letter-spacing:-.4pt'> </span><span
-# style='letter-spacing:-.2pt'>E.01</span><span style='text-decoration:none;
-# text-underline:none'><o:p></o:p></span></h1>
-#### Desired Data from this: S.1, E.01, &
-#### all html between the current <h1> and the next <h1> tag (this will be the dialouge for the episode)
-#### Should return a two key dict in the format {[Season, Episode]: [html]}
-
-
-#### Extract description from scenes and dialouge between it and the next scene
-# <p class=MsoNormal style='margin-top:.05pt;margin-right:40.95pt;margin-bottom:
-# 0in;margin-left:.95pt;margin-bottom:.0001pt;line-height:115%'><i
-# style='mso-bidi-font-style:normal'>[Scene:<span style='letter-spacing:-.15pt'> </span>A<span
-# style='letter-spacing:-.1pt'> </span>young<span style='letter-spacing:-.2pt'> </span>boy,
-# Tanjirou, carries<span style='letter-spacing:-.1pt'> </span>his<span
-# style='letter-spacing:-.2pt'> </span>sister,<span style='letter-spacing:-.25pt'>
-# </span>Nezuko,<span style='letter-spacing:-.05pt'> </span>on<span
-# style='letter-spacing:-.2pt'> </span>his<span style='letter-spacing:-.05pt'> </span>back<span
-# style='letter-spacing:-.3pt'> </span>through<span style='letter-spacing:-.1pt'>
-# </span>the<span style='letter-spacing:-.2pt'> </span>snow.<span
-# style='letter-spacing:-.15pt'> </span>Nezuko<span style='letter-spacing:-.1pt'>
-# </span>is bleeding from a wound on her head.]<o:p></o:p></i></p>
-#### Desired Data from this: "At a small cabin in the mountains, during the morning. Tanjirou takes up a basket of charcoal on his back and is preparing to leave the hous"
-#### & all html between the current <p> with brackets [Scene:...] and the next <p> tag with [Scene:...](this will be the dialouge for the scene)
-
-#### Extract dialouge from scenes and dialouge between it and the next scene
-# <p class=MsoNormal style='margin-top:10.7pt;margin-right:0in;margin-bottom:
-# 0in;margin-left:.95pt;margin-bottom:.0001pt;tab-stops:76.8pt'><b
-# style='mso-bidi-font-weight:normal'><span style='letter-spacing:-.1pt'>Tanjirou</span><span
-# style='mso-tab-count:1'>           </span></b>(Thoughts)<span style='letter-spacing:
-# -.4pt'> </span><span style='letter-spacing:-.2pt'>How…?</span></p>
-#### Desired Data from this: speaker (Tanjirou), text (How...?), & all html between the current <p> with a tab span and the next <p> tag (this will be the dialouge for the speaker)
-# Speakers have the following always after they speak:
-# <span style='letter-spacing:-.25pt'>Kie</span><span
-# style='mso-tab-count:1'>
-
 # Setup csv file
 with open(csv_file_path, "w", encoding="utf-8") as csv_file:
     # Write the header row
@@ -143,7 +105,8 @@ with open(csv_file_path, "w", encoding="utf-8") as csv_file:
                     if text.startswith("(") and ")" in text:
                         preface = text[1:text.index(")")]
                         text = text[text.index(")") + 1:].strip()
-                    dialouge = Dialogue(text, dialouge.speaker, scene, episode_number, season_number, preface=preface)
+                    dialouge.text += "\n" + text;
+                    dialouge.preface = preface or dialouge.preface
                     dialouges.append(dialouge)
 
 # Turn Dialouge array into a CSV file

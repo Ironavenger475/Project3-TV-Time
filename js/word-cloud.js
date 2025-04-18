@@ -1,9 +1,13 @@
+import WordTree from './word-tree.js';
+import stopWords from './stop-words.js';
+
 const cloud = d3Cloud;
 
 class WordCloud {
     constructor(parentDiv, data) {
         this.maxWordCount = 200; // Maximum number of words to display
         this.parentDiv = d3.select(parentDiv);
+        this.fullData = data; // Store the full data for later use
         this.data = this.processData(data); // Process data to calculate word counts
 
         // Create a new div for the word cloud
@@ -14,6 +18,8 @@ class WordCloud {
         
         this.tooltip = d3.select('body').append('div');
         this.tooltip.attr("class", 'tooltip');
+        this.popupCount = 0;
+        this.maxPopupCount = 3; // Maximum number of popups allowed
 
         // Initialize the word cloud
         this.init();
@@ -27,8 +33,8 @@ class WordCloud {
             if (row.text) {
                 const words = row.text.split(/\s+/); // Split text into words
                 words.forEach(word => {
-                    const cleanedWord = word.toLowerCase().replace(/[^a-z0-9]/gi, ''); // Clean word
-                    if (cleanedWord) {
+                    const cleanedWord = word.toLowerCase().replace(/[^a-z']/g, ''); // Clean word
+                    if (cleanedWord && !stopWords.includes(cleanedWord)) {
                         wordCounts[cleanedWord] = (wordCounts[cleanedWord] || 0) + 1;
                     }
                 });
@@ -90,13 +96,7 @@ class WordCloud {
             .attr('text-anchor', 'middle')
             .attr('transform', d => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
             .text(d => d.text)
-            .on('mouseout', () => {
-                this.tooltip.style('display', "none");
-            })
             .on('mouseover', (event, d) => {
-                this.tooltip.transition()
-                    .duration(200)
-                    .style('opacity', 0.9);
                 this.tooltip.html(`Word: ${d.text}<br>Count: ${d.count}<br>Click to see more`)
                     .style('left', `${event.pageX}px`)
                     .style('top', `${event.pageY - 28}px`)
@@ -107,10 +107,85 @@ class WordCloud {
                     .duration(200)
                     .style('opacity', 0.9);
                 this.tooltip.html(`Word: ${d.text}<br>Count: ${d.count}<br>Click to see more`)
-                    .style('left', `${event.pageX}px`)
-                    .style('top', `${event.pageY - 28}px`)
+                    .style('left', `${event.pageX + 10}px`)
+                    .style('top', `${event.pageY + 10}px`)
                     .style('display', "block");
             })
+            .on('mouseout', () => {
+                this.tooltip.style('display', "none");
+            })
+            .on('click', (event, d) => {
+                this.createPopup(d.text);
+            });
+    }
+
+    createPopup(word) {
+        if (this.popupCount >= this.maxPopupCount) {
+            alert("Maximum number of word tree popups reached. Please close some to open new ones.");
+            return;
+        }
+        this.popupCount++;
+        // Create a popup div
+        const popup = d3.select('body').append('div')
+            .attr('class', 'popup')
+            .style('position', 'absolute')
+            .style('left', `${this.popupCount * 50}px`)
+            .style('top', `${this.popupCount * 50}px`)
+            .style('width', '75vwpx')
+            .style('height', '400px')
+            .style('background', '#fff')
+            .style('border', '1px solid #ccc')
+            .style('box-shadow', '0 4px 8px rgba(0, 0, 0, 0.2)')
+            .style('z-index', 1000)
+            .style('overflow', 'auto');
+
+        // Add a close button
+        popup.append('button')
+            .html('<i class="bi bi-x-lg"></i>x')
+            .style('background', 'none')
+            .style('border', 'none')
+            .style('font-size', '25px')
+            .style('position', 'absolute')
+            .style('top', '0px')
+            .style('right', '5px')
+            .on('click', () => {
+                this.popupCount--;
+                popup.remove();
+            });
+
+        // Add a title
+        popup.append('h3').text(`Word: ${word}`);
+
+        // Add a container for the tree
+        const treeContainer = popup.append('div')
+            .attr('class', 'tree-container')
+            .style('padding', '10px');
+
+        // Render the tree using the WordTree class
+        new WordTree(treeContainer.node(), word, this.fullData);
+
+        // Make the popup draggable
+        this.makeDraggable(popup.node());
+    }
+
+    makeDraggable(element) {
+        let offsetX, offsetY;
+        element.addEventListener('mousedown', (event) => {
+            offsetX = event.clientX - element.offsetLeft;
+            offsetY = event.clientY - element.offsetTop;
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
+
+        function onMouseMove(event) {
+            element.style.left = `${event.clientX - offsetX}px`;
+            element.style.top = `${event.clientY - offsetY}px`;
+        }
+
+        function onMouseUp() {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
     }
 }
 
