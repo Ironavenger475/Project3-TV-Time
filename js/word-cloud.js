@@ -31,9 +31,9 @@ class WordCloud {
         // Iterate through the data and count words in the 'text' field
         data.forEach(row => {
             if (row.text) {
-                const words = row.text.split(/\s+/); // Split text into words
+                const words = row.text.toLowerCase().split(/\s+/); // Split text into words
                 words.forEach(word => {
-                    const cleanedWord = word.toLowerCase().replace(/[^a-z']/g, ''); // Clean word
+                    const cleanedWord = word.replace(/[^a-z']/g, ''); // Clean word
                     if (cleanedWord && !stopWords.includes(cleanedWord)) {
                         wordCounts[cleanedWord] = (wordCounts[cleanedWord] || 0) + 1;
                     }
@@ -138,26 +138,33 @@ class WordCloud {
             .style('box-shadow', '0 4px 8px rgba(0, 0, 0, 0.2)')
             .style('z-index', 1000)
             .style('overflow', 'auto');
+        
+        // add contents
+        const content = popup.append('div')
+            .attr('class', 'popup-content')
+            .style('background', '#fff')
+            .style('padding', '10px')
 
         // Add a close button
         popup.append('button')
             .html('<i class="bi bi-x-lg"></i>x')
+            .style('position', 'absolute')
             .style('background', 'none')
             .style('border', 'none')
             .style('font-size', '25px')
             .style('position', 'absolute')
-            .style('top', '0px')
-            .style('right', '5px')
+            .style('top', '20px')
+            .style('right', '25px')
             .on('click', () => {
                 this.popupCount--;
                 popup.remove();
             });
 
         // Add a title
-        popup.append('h3').text(`Word: ${word}`);
+        content.append('h3').text(`Word: ${word}`);
 
         // Add a container for the tree
-        const treeContainer = popup.append('div')
+        const treeContainer = content.append('div')
             .attr('class', 'tree-container')
             .style('padding', '10px');
 
