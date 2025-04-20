@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(62, 42, 86, 0.9);
+  background: rgba(94, 17, 31, 0.8);
   color:#d6b479;
   display: flex;
   align-items: center;
@@ -16,28 +16,34 @@
   border-radius: 10px;
 }
 
+a{
+  color:#d6b479;
+}
 .popup {
   background: #260707;
-  padding: 20px;
-  width: 600px;
+  padding: 10px;
+  height:75%;
+  width: 80%;
   border-radius: 10px;
   box-shadow: 0 0 10px #000;
   text-align: center;
+  border-radius: 25px;
 }
 
 .hidden {
   display: none;
 }
 
-.popup-content {
+/* .popup-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
+} */
 
 .popup-text {
   flex: 2;
   text-align: justify;
+  background: #260707;
 }
 
 .popup-image {
@@ -51,3 +57,81 @@
   object-fit: contain;
 }
 
+.popup-image1 img {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+}
+.popup-inner {
+  padding: 10px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.popup-content {
+  max-height: 80%;
+  overflow-y: auto;
+  border-radius: 10px;
+  background: #260707;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.popup-text.scrollable {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Wrap image to the right of the first paragraph */
+.text-with-image {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+
+.popup-image img {
+  float: right;
+  max-width: 120px;
+  height: auto;
+  margin-left: 15px;
+  margin-top: 5px;
+}
+
+.popup-image2 {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex-direction: row; /* Ensures image is on the left */
+  margin-bottom: 20px;
+}
+
+.popup-image1 {
+  flex-shrink: 0;
+}
+
+.popup-image2 img {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+}
+
+.text-content {
+  flex: 1;
+  text-align: justify;
+}
+
+/* .popup-content::-webkit-scrollbar,
+.popup-text.scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+.popup-content,
+.popup-text.scrollable {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;     
+} */
+
+.popup-image2 .text-content {
+  text-align: right;
+}
