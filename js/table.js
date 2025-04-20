@@ -10,12 +10,12 @@ class Table {
 
     processData() {
         const phraseCount = {};
-        const minWords = 3; // Only phrases with 3+ words
-
+        const minWords = 3;
+    
         this.data.forEach(row => {
             const text = row.text?.toLowerCase().replace(/[.,!?"]/g, '').trim();
             if (!text) return;
-
+    
             const words = text.split(/\s+/);
             for (let n = minWords; n <= words.length; n++) {
                 for (let i = 0; i <= words.length - n; i++) {
@@ -24,12 +24,26 @@ class Table {
                 }
             }
         });
-
-        // Filter to only show common phrases (2+)
-        this.tableData = Object.entries(phraseCount)
-            .filter(([_, count]) => count > 1)
+    
+        // Step 1: Convert to array of phrases with count
+        let phrases = Object.entries(phraseCount)
+            .filter(([_, count]) => count > 4)
             .map(([phrase, count]) => ({ phrase, count }))
-            .sort((a, b) => b.count - a.count);
+            .sort((a, b) => b.count - a.count || b.phrase.length - a.phrase.length);
+    
+        // Step 2: Remove subphrases that are contained in longer phrases with same count
+        const filtered = [];
+        for (let i = 0; i < phrases.length; i++) {
+            const { phrase, count } = phrases[i];
+            const isSubphrase = filtered.some(entry =>
+                entry.count === count && entry.phrase.includes(phrase)
+            );
+            if (!isSubphrase) {
+                filtered.push(phrases[i]);
+            }
+        }
+    
+        this.tableData = filtered;
     }
 
     init() {
