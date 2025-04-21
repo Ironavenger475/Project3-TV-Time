@@ -3,31 +3,48 @@ import { tabs, createTabs } from './tabs.js';
 import Table from './table.js';
 import PieChart from './pieChart.js';
 
-// Load data from CSV file
 let data = [];
+let filteredData = [];
+let currentCharacter = null;
 
 window.onload = () => {
     showPopup();
     d3.csv('./data/demon-slayer-transcript.csv').then(csvData => {
         data = csvData;
-        console.log(data)
         createTabs(tabs, renderTabContent);
+        loadCharacterData();
     });
 };
 
+function loadCharacterData() {
+    d3.csv("data/demon-slayer-transcript.csv", d => ({
+        character: d.character,
+        count: +d.count
+    })).then(charData => {
+        const filteredCharData = charData.filter(d => d.count > 20 && d.character);
+        window.characterData = filteredCharData;
+        initializeFilter(filteredCharData, onCharacterSelect);
+    });
+}
+
+function onCharacterSelect(characterName) {
+    currentCharacter = characterName;
+    filteredData = data.filter(d => d.speaker === characterName);
+    updateWordCloud(); // Re-render if active
+}
+
 function renderTabContent(tabName) {
     if (tabName === "Word Cloud") {
-        const tabContent = document.getElementById('tab-0'); // Assuming Word Cloud is the first tab
-        tabContent.innerHTML = ''; // Clear existing content
+        const tabContent = document.getElementById('tab-0');
+        tabContent.innerHTML = '';
 
-        // Create a container div for the word cloud
         const wordCloudContainer = document.createElement('div');
         wordCloudContainer.style.width = '100%';
-        wordCloudContainer.style.height = '400px'; // Adjust height as needed
+        wordCloudContainer.style.height = '400px';
+        wordCloudContainer.id = 'word-cloud-container';
         tabContent.appendChild(wordCloudContainer);
 
-        // Initialize the WordCloud object
-        new WordCloud(wordCloudContainer, data);
+        updateWordCloud();
     }
     if (tabName === "Phrases") {
         const tabContent = document.getElementById('tab-2');
@@ -43,6 +60,14 @@ function renderTabContent(tabName) {
         new PieChart(tabContent, data); // 👈 Use the class from table.js
         
     }
+}
+
+function updateWordCloud() {
+    const container = document.getElementById('word-cloud-container');
+    if (!container) return;
+    container.innerHTML = '';
+    const cloudData = currentCharacter ? filteredData : data;
+    new WordCloud(container, cloudData);
 }
 
 const overlay = document.getElementById("overlay");
