@@ -23,6 +23,22 @@ class SentenceTrie {
         this.root = new TrieNode(word);
     }
 
+    removeLowWeightChildren() {
+        const childrenToRemove = [];
+        
+        // First pass: identify nodes to remove
+        for (const [key, child] of this.root.children) {
+            if (child.weight <= 1) {
+                childrenToRemove.push(key);
+            }
+        }
+        
+        // Second pass: safely remove identified nodes
+        for (const key of childrenToRemove) {
+            this.root.children.delete(key);
+        }
+    }
+
     insert(sentence, speaker) {
         let node = this.root;
         const words = sentence.split(" ");

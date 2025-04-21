@@ -61,21 +61,10 @@ class WordTree {
             };
         };
 
-        // remove any children with a weight of 1, 
-        // and a parent with a weight of 1 recursively
-        const removeSingleWeightChildren = (node) => {
-            if (node.children.length === 0) {
-                return;
-            }
-            // remove children with a weight of 1
-            node.children = node.children.filter(child => child.weight > 1);
-            // remove parent with a weight of 1
-            if(node.children.length === 0 && node.weight === 1) {
-                return;
-            }
-        }
+        // remove all weight 1 children of root
+        processedData.removeLowWeightChildren();
+
         const convertedData = convertToHierarchy(processedData.root)
-        removeSingleWeightChildren(convertedData);
         console.log(convertedData);
         return convertedData;
     }
