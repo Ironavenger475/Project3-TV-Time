@@ -37,6 +37,34 @@ class SentenceTrie {
         for (const key of childrenToRemove) {
             this.root.children.delete(key);
         }
+
+        // if a node has a weight <1, remove all it's weight <1 children
+        const processChildren = (node) => {
+            if(node.weight <= 1){
+                // First pass: identify nodes to remove
+                const childrenToRemove = [];
+                for (const [key, child] of node.children) {
+                    if (child.weight <= 1) {
+                        childrenToRemove.push(key);
+                    }
+                }
+            
+                // Second pass: safely remove identified nodes
+                for (const key of childrenToRemove) {
+                    node.children.delete(key);
+                }
+                
+                // Recursively process remaining children
+                for (const child of node.children.values()) {
+                    processChildren(child);
+                }
+            }
+        };
+
+        // skip the already cleaned direct descendants of root
+        for (const child of this.root.children.values()) {
+            processChildren(child);
+        }
     }
 
     insert(sentence, speaker) {

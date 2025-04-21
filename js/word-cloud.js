@@ -33,7 +33,7 @@ class WordCloud {
             if (row.text) {
                 const words = row.text.toLowerCase().split(/\s+/); // Split text into words
                 words.forEach(word => {
-                    const cleanedWord = word.replace(/[^a-z']/g, ''); // Clean word
+                    const cleanedWord = String(word).replace(/[^a-z’]/g, ''); // Clean word
                     if (cleanedWord && !stopWords.includes(cleanedWord)) {
                         wordCounts[cleanedWord] = (wordCounts[cleanedWord] || 0) + 1;
                     }

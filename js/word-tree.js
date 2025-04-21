@@ -32,19 +32,12 @@ class WordTree {
                 return; // stop processing this row
             }
             // remove all special characters except '
-            const textWithoutMostSpecialCharacters = textEndingWithPeriod.replace(/[^a-zA-Z\s']/g, ' ');
+            const textWithoutMostSpecialCharacters = textEndingWithPeriod.replace(/[^a-zA-Z’\s']/g, ' ');
             // remove all extra spaces
             const cleanedText = textWithoutMostSpecialCharacters.split(" ")
                 .map(t => t.replace(/\s/g, ""))
                 .filter(t => t !== "")
                 .join(" ");
-            
-            /*console.log(
-                "og:",text+"\n",
-                "word start:",textStartingWithWord+"\n",
-                "no periods:",textEndingWithPeriod+"\n",
-                "no spec:",textWithoutMostSpecialCharacters+"\n",
-                "clean:",cleanedText)*/
 
             // Update the tree structure
             processedData.insert(cleanedText, row.speaker);
@@ -226,9 +219,12 @@ class WordTree {
             .text(d => d.data.word);
 
         // Add legend for speakers
-        const legend = svg.append("g")
-            .attr("class", "legend")
-            .attr("transform", `translate(${width-75},${-height/2 - 50})`); // Adjusted to top-right corner at the top
+        const legendContainer = this.container.append("svg")
+            .style("position", "absolute")
+            .style("top", "50px")
+            .style("right", "-150px");
+        const legend = legendContainer.append("g")
+            .attr("class", "legend");
 
         speakers.forEach((speaker, i) => {
             const legendRow = legend.append("g")
