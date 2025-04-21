@@ -55,29 +55,25 @@ class WordTree {
         const convertToHierarchy = (node) => {
             return {
                 word: node.word,
+                weight: node.weight,
                 speakers: node.speakers,
                 children: Array.from(node.children.values()).map(convertToHierarchy)
             };
         };
 
-        // remove any children with a weight of 1, recursively, if two children in a row have a weight of 1, remove the second
+        // remove any children with a weight of 1, 
+        // and a parent with a weight of 1 recursively
         const removeSingleWeightChildren = (node) => {
-            if (node.children) {
-                let previousChildHadWeightOne = false;
-                node.children = node.children.filter(child => {
-                    if (child.weight > 1) {
-                        removeSingleWeightChildren(child);
-                        previousChildHadWeightOne = false;
-                        return true;
-                    } else if (!previousChildHadWeightOne) {
-                        previousChildHadWeightOne = true;
-                        return true;
-                    }
-                    previousChildHadWeightOne = false;
-                    return false;
-                });
+            if (node.children.length === 0) {
+                return;
             }
-        };
+            // remove children with a weight of 1
+            node.children = node.children.filter(child => child.weight > 1);
+            // remove parent with a weight of 1
+            if(node.children.length === 0 && node.weight === 1) {
+                return;
+            }
+        }
         const convertedData = convertToHierarchy(processedData.root)
         removeSingleWeightChildren(convertedData);
         console.log(convertedData);
@@ -196,7 +192,7 @@ class WordTree {
                 .attr("class", "pie-label")
                 .attr("transform", d => {
                     const [x, y] = arc.centroid(d);
-                    return `translate(${x/1.2},${y/1.2})`;
+                    return `translate(${x*1.75},${y*1.75})`;
                 })
                 .attr("dy", "0.35em")
                 .style("text-anchor", "middle")

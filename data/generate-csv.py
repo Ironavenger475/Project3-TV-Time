@@ -56,7 +56,7 @@ with open(csv_file_path, "w", encoding="utf-8") as csv_file:
         dialouge = None
 
         # Get all HTML between the current <h1> and the next <h1>
-        # this issue with this is the h1 is in a div, there is a div for each page, i need it to get 
+        # the issue with this is the h1 is in a div, there is a div for each page, i need it to get 
         # all the html between the current h1 and the next h1, despite being in different div parents, and several divs being between them
         # Get all HTML between the current <h1> and the next <h1>, spanning multiple divs
         html_between = []
@@ -96,8 +96,9 @@ with open(csv_file_path, "w", encoding="utf-8") as csv_file:
                             if text.startswith("(") and ")" in text:
                                 preface = text[1:text.index(")")]  # Extract content inside parentheses
                                 text = text[text.index(")") + 1:].strip()  # Remove the preface from the text
-                            dialouge = Dialogue(text, speaker, scene, episode_number, season_number, preface=preface)
-                            dialouges.append(dialouge)
+                            if not any(d.text == text for d in dialouges):
+                                dialouge = Dialogue(text, speaker, scene, episode_number, season_number, preface=preface)
+                                dialouges.append(dialouge)
                 elif dialouge is not None:
                     # Subsequent lines without speakers are assumed to be the same person
                     text = line.text.strip()
@@ -105,12 +106,35 @@ with open(csv_file_path, "w", encoding="utf-8") as csv_file:
                     if text.startswith("(") and ")" in text:
                         preface = text[1:text.index(")")]
                         text = text[text.index(")") + 1:].strip()
-                    dialouge.text += "\n" + text;
-                    dialouge.preface = preface or dialouge.preface
-                    dialouges.append(dialouge)
+                    if not any(d.text == text for d in dialouges):
+                        dialouge.text += "\n" + text;
+                        dialouge.preface = preface or dialouge.preface
+                        dialouges.append(dialouge)
+
+speaker_indicator = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0"
+fixed_dialouges = []
+# fix issues where dialouge.text will contain multiple speakers
+for old_dialogue in dialouges:
+    if speaker_indicator in old_dialogue.text:
+        # Split the line by the speaker indicator to handle multiple speakers
+        parts = line.text.split(speaker_indicator)
+        for i in range(0, len(parts) - 1, 2):  # Iterate in pairs (speaker, dialogue)
+            speaker = parts[i].strip()
+            text = parts[i + 1].strip()
+            if speaker and text:
+                preface = None
+                # Check if the text starts with '(' indicating a preface
+                if text.startswith("(") and ")" in text:
+                    preface = text[1:text.index(")")]  # Extract content inside parentheses
+                    text = text[text.index(")") + 1:].strip()  # Remove the preface from the text
+                if not any(d.text == text for d in fixed_dialouges):
+                    fixed_dialouge = Dialogue(text, speaker, old_dialogue.scene, old_dialogue.episode_number, old_dialogue.season_number, preface=preface)
+                    fixed_dialouges.append(fixed_dialouge)
+    elif not any(d.text == old_dialogue.text for d in fixed_dialouges):
+        fixed_dialouges.append(old_dialogue)
 
 # Turn Dialouge array into a CSV file
-for dialouge in dialouges:
+for dialouge in fixed_dialouges:
     # Get the text, speaker, scene, episode, season, preface, and action
     text = dialouge.text
     speaker = dialouge.speaker
