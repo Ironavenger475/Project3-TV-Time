@@ -4,6 +4,7 @@ import { tabs, createTabs } from './tabs.js';
 import Table from './table.js';
 import PieChart from './pieChart.js';
 import CharMap from './map.js';
+import { Timeline } from './timeline.js';
 
 let data = [];
 let filteredData = [];
@@ -17,7 +18,7 @@ window.onload = () => {
     loadData('./data/demon-slayer-transcript.csv')
         .then(csvData => {
             data = csvData.map(d => ({ ...d, character: d.speaker?.trim() }));
-
+            const timeline = new Timeline("timeline", 64, 16);
             createTabs(tabs, renderTabContent);
 
             const characterCountMap = {};
@@ -50,6 +51,7 @@ window.onload = () => {
             updateLoadingMessage("Failed to load data.");
             setTimeout(() => hideLoading(), 1500);
         });
+
 };
 
 function onCharacterSelect(characterName) {
@@ -147,3 +149,4 @@ function hidePopup() {
 
 continueBtn.addEventListener("click", hidePopup);
 reopenPopupBtn.addEventListener("click", showPopup);
+

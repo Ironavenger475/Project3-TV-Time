@@ -275,3 +275,10 @@ g{
 .phrase-table {
   color: black;
 }
+#timeline-labels {
+  position: fixed;
+  bottom: 80px;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+}
