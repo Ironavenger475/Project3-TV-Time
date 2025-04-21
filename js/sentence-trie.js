@@ -72,19 +72,20 @@ class SentenceTrie {
             this.root.children.delete(key);
         }
 
-        // if a node has a weight <1, remove all it's weight <1 children
+        // if a node has a weight <1, concat all it's weight <1 children's ancestry
         const processChildren = (node) => {
             if(node.weight <= 1){
                 // First pass: identify nodes to remove
-                const childrenToRemove = [];
+                const childrenToConcat = [];
                 for (const [key, child] of node.children) {
                     if (child.weight <= 1) {
-                        childrenToRemove.push(key);
+                        childrenToConcat.push(key);
                     }
                 }
             
-                // Second pass: safely remove identified nodes
-                for (const key of childrenToRemove) {
+
+                // Second pass: concat ancestry
+                for (const key of childrenToConcat) {
                     node.children.delete(key);
                 }
             }

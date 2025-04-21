@@ -23,7 +23,7 @@ class WordTree {
         };
 
         // remove all weight 1 children of root
-        processedData.removeLowWeightChildren();
+        //processedData.removeLowWeightChildren();
 
         const convertedData = convertToHierarchy(processedData.root)
         console.log(convertedData);
@@ -189,8 +189,8 @@ class WordTree {
         // Add legend for speakers
         const legendContainer = this.container.append("svg")
             .style("position", "absolute")
-            .style("top", "50px")
-            .style("right", "-150px");
+            .style("top", "65px")
+            .style("right", "-225px");
         const legend = legendContainer.append("g")
             .attr("class", "legend");
 

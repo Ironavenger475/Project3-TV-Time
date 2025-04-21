@@ -112,9 +112,14 @@ with open(csv_file_path, "w", encoding="utf-8") as csv_file:
                         dialouges.append(dialouge)
 
 speaker_indicator = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0"
+bad_text = """Japanese script from English translation from
+Transcribed and organized
+by Kiriban"""
 fixed_dialouges = []
 # fix issues where dialouge.text will contain multiple speakers
 for old_dialogue in dialouges:
+    # Remove the exact phrase
+    old_dialogue.text = old_dialogue.text.replace(bad_text, "")
     if speaker_indicator in old_dialogue.text:
         # Split the line by the speaker indicator to handle multiple speakers
         parts = line.text.split(speaker_indicator)
