@@ -97,3 +97,11 @@ g{
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
+
+#timeline-labels {
+  position: fixed;
+  bottom: 80px;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+}

@@ -1,5 +1,6 @@
 import WordCloud from './word-cloud.js';
 import { tabs, createTabs } from './tabs.js';
+import { Timeline } from './timeline.js';
 
 // Load data from CSV file
 let data = [];
@@ -8,6 +9,7 @@ window.onload = () => {
     showPopup();
     d3.csv('./data/demon-slayer-transcript.csv').then(csvData => {
         data = csvData;
+        const timeline = new Timeline("timeline", 64, 16);
         console.log(data)
         createTabs(tabs, renderTabContent);
     });
@@ -43,3 +45,4 @@ function hidePopup() {
 
 continueBtn.addEventListener("click", hidePopup);
 reopenPopupBtn.addEventListener("click", showPopup);
+
