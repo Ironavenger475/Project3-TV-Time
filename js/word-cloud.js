@@ -3,9 +3,17 @@ import stopWords from './stop-words.js';
 
 const cloud = d3Cloud;
 
+// add capitalize function to string objects for my sanity
+Object.defineProperty(String.prototype, 'capitalize', {
+    value: function() {
+        return this.charAt(0).toUpperCase() + this.slice(1);
+    },
+    enumerable: false
+});
+
 class WordCloud {
     constructor(parentDiv, data) {
-        this.maxWordCount = 200; // Maximum number of words to display
+        this.maxWordCount = 1000; // Maximum number of words to display
         this.parentDiv = d3.select(parentDiv);
         this.fullData = data; // Store the full data for later use
         this.data = this.processData(data); // Process data to calculate word counts
@@ -46,7 +54,10 @@ class WordCloud {
         const topWordCounts = sortedWordCounts.slice(0, this.maxWordCount);
 
         // Convert wordCounts object into an array of { text, count } objects
-        return topWordCounts.map(([text, count]) => ({ text, count }));
+        return topWordCounts.map(([text, count]) => ({
+            text: text.capitalize(),
+            count
+        }));
     }
 
     init() {
@@ -127,46 +138,79 @@ class WordCloud {
         this.popupCount++;
         // Create a popup div
         const popup = d3.select('body').append('div')
-            .attr('class', 'popup')
-            .style('position', 'absolute')
-            .style('left', `${this.popupCount * 50}px`)
-            .style('top', `${this.popupCount * 50}px`)
-            .style('width', '75vwpx')
-            .style('height', '400px')
-            .style('background', '#fff')
-            .style('border', '1px solid #ccc')
-            .style('box-shadow', '0 4px 8px rgba(0, 0, 0, 0.2)')
-            .style('z-index', 1000)
-            .style('overflow', 'auto');
-        
-        // add contents
-        const content = popup.append('div')
-            .attr('class', 'popup-content')
-            .style('background', '#fff')
-            .style('padding', '10px')
+        .attr('class', 'popup')
+        .style('position', 'absolute')
+        .style('left', `${this.popupCount * 50}px`)
+        .style('top', `${this.popupCount * 50}px`)
+        .style('width', '500px')
+        .style('height', '80vh')
+        .style('margin','0')
+        .style('padding', '0')
+        .style('background', '#fff')
+        .style('border', '1px solid #ccc')
+        .style('box-shadow', '0 4px 8px rgba(0, 0, 0, 0.2)')
+        .style('z-index', 2);
 
-        // Add a close button
-        popup.append('button')
-            .html('<i class="bi bi-x-lg"></i>x')
-            .style('position', 'absolute')
-            .style('background', 'none')
-            .style('border', 'none')
-            .style('font-size', '25px')
-            .style('position', 'absolute')
-            .style('top', '20px')
-            .style('right', '25px')
-            .on('click', () => {
-                this.popupCount--;
-                popup.remove();
-            });
+        // Add header container for fixed elements
+        const header = popup.append('div')
+        .style('position', 'relative')
+        .style('height', '50px')
+        .style('border-bottom', '1px solid #ccc');
 
-        // Add a title
-        content.append('h3').text(`Word: ${word}`);
+        // Add close button inside header
+        header.append('button')
+        .html('<i class="bi bi-x-lg"></i>')
+        .style('position', 'absolute')
+        .style('background', 'none')
+        .style('border', 'none')
+        .style('font-size', '25px')
+        .style('top', '15px')
+        .style('right', '15px')
+        .on('click', () => {
+            this.popupCount--;
+            popup.remove();
+        });
 
-        // Add a container for the tree
-        const treeContainer = content.append('div')
-            .attr('class', 'tree-container')
-            .style('padding', '10px');
+        // Add title inside header// Add title inside header
+        const title = header.append("div")
+        .style("margin", "0")
+        .style("display","flex")
+        .style("justify-content","center")
+        .style("align-items","center");
+
+        title.append('p').text("word trie for ").style("margin-right","5px");
+        title.append('h3').text(` ${word.capitalize()}`);
+
+        // Add info icon with tooltip using Bootstrap Icons
+        const info = title.append('i')
+            .attr('class', 'bi bi-info-circle-fill')
+            .style('color', '#666')
+            .style('margin-left', '5px')
+            .style('cursor', 'help');
+
+        const trieInfo = "A trie is a special type of weighted tree that represents several sentences at once.<br> It is commonly used in autocomplete to guess the next most used word.<br> Here it shows how common words are in the transcript."
+        const tooltip = this.tooltip
+        info.on('mouseover', function(event) {
+            tooltip.html(trieInfo)
+                .style('left', `${event.pageX}px`)
+                .style('top', `${event.pageY - 28}px`)
+                .style('display', "block");
+        })
+        .on('mousemove', function(event) {
+            tooltip.html(trieInfo)
+                .style('left', `${event.pageX}px`)
+                .style('top', `${event.pageY - 28}px`)
+                .style('display', "block");
+        })
+        .on('mouseout', function() {
+            tooltip.style('display', "none");
+        });
+
+        const treeContainer = popup.append('div')
+        .attr('class', 'tree-container')
+        .style('overflow-y', 'auto')
+        .style('height', 'calc(100% - 60px)')
+        .style('padding', '10px');
 
         // Render the tree using the WordTree class
         new WordTree(treeContainer.node(), word, this.fullData);
