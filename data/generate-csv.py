@@ -41,44 +41,6 @@ class Dialogue:
 
 dialouges = []
 
-#### Extract info for each episode
-# Header Format :
-# <h1>Demon<span style='letter-spacing:-.15pt'> </span>Slayer<span
-# style='letter-spacing:-.3pt'> </span>S.1<span style='letter-spacing:-.4pt'> </span><span
-# style='letter-spacing:-.2pt'>E.01</span><span style='text-decoration:none;
-# text-underline:none'><o:p></o:p></span></h1>
-#### Desired Data from this: S.1, E.01, &
-#### all html between the current <h1> and the next <h1> tag (this will be the dialouge for the episode)
-#### Should return a two key dict in the format {[Season, Episode]: [html]}
-
-
-#### Extract description from scenes and dialouge between it and the next scene
-# <p class=MsoNormal style='margin-top:.05pt;margin-right:40.95pt;margin-bottom:
-# 0in;margin-left:.95pt;margin-bottom:.0001pt;line-height:115%'><i
-# style='mso-bidi-font-style:normal'>[Scene:<span style='letter-spacing:-.15pt'> </span>A<span
-# style='letter-spacing:-.1pt'> </span>young<span style='letter-spacing:-.2pt'> </span>boy,
-# Tanjirou, carries<span style='letter-spacing:-.1pt'> </span>his<span
-# style='letter-spacing:-.2pt'> </span>sister,<span style='letter-spacing:-.25pt'>
-# </span>Nezuko,<span style='letter-spacing:-.05pt'> </span>on<span
-# style='letter-spacing:-.2pt'> </span>his<span style='letter-spacing:-.05pt'> </span>back<span
-# style='letter-spacing:-.3pt'> </span>through<span style='letter-spacing:-.1pt'>
-# </span>the<span style='letter-spacing:-.2pt'> </span>snow.<span
-# style='letter-spacing:-.15pt'> </span>Nezuko<span style='letter-spacing:-.1pt'>
-# </span>is bleeding from a wound on her head.]<o:p></o:p></i></p>
-#### Desired Data from this: "At a small cabin in the mountains, during the morning. Tanjirou takes up a basket of charcoal on his back and is preparing to leave the hous"
-#### & all html between the current <p> with brackets [Scene:...] and the next <p> tag with [Scene:...](this will be the dialouge for the scene)
-
-#### Extract dialouge from scenes and dialouge between it and the next scene
-# <p class=MsoNormal style='margin-top:10.7pt;margin-right:0in;margin-bottom:
-# 0in;margin-left:.95pt;margin-bottom:.0001pt;tab-stops:76.8pt'><b
-# style='mso-bidi-font-weight:normal'><span style='letter-spacing:-.1pt'>Tanjirou</span><span
-# style='mso-tab-count:1'>           </span></b>(Thoughts)<span style='letter-spacing:
-# -.4pt'> </span><span style='letter-spacing:-.2pt'>How…?</span></p>
-#### Desired Data from this: speaker (Tanjirou), text (How...?), & all html between the current <p> with a tab span and the next <p> tag (this will be the dialouge for the speaker)
-# Speakers have the following always after they speak:
-# <span style='letter-spacing:-.25pt'>Kie</span><span
-# style='mso-tab-count:1'>
-
 # Setup csv file
 with open(csv_file_path, "w", encoding="utf-8") as csv_file:
     # Write the header row
@@ -94,7 +56,7 @@ with open(csv_file_path, "w", encoding="utf-8") as csv_file:
         dialouge = None
 
         # Get all HTML between the current <h1> and the next <h1>
-        # this issue with this is the h1 is in a div, there is a div for each page, i need it to get 
+        # the issue with this is the h1 is in a div, there is a div for each page, i need it to get 
         # all the html between the current h1 and the next h1, despite being in different div parents, and several divs being between them
         # Get all HTML between the current <h1> and the next <h1>, spanning multiple divs
         html_between = []
@@ -134,8 +96,9 @@ with open(csv_file_path, "w", encoding="utf-8") as csv_file:
                             if text.startswith("(") and ")" in text:
                                 preface = text[1:text.index(")")]  # Extract content inside parentheses
                                 text = text[text.index(")") + 1:].strip()  # Remove the preface from the text
-                            dialouge = Dialogue(text, speaker, scene, episode_number, season_number, preface=preface)
-                            dialouges.append(dialouge)
+                            if not any(d.text == text for d in dialouges):
+                                dialouge = Dialogue(text, speaker, scene, episode_number, season_number, preface=preface)
+                                dialouges.append(dialouge)
                 elif dialouge is not None:
                     # Subsequent lines without speakers are assumed to be the same person
                     text = line.text.strip()
@@ -143,11 +106,40 @@ with open(csv_file_path, "w", encoding="utf-8") as csv_file:
                     if text.startswith("(") and ")" in text:
                         preface = text[1:text.index(")")]
                         text = text[text.index(")") + 1:].strip()
-                    dialouge = Dialogue(text, dialouge.speaker, scene, episode_number, season_number, preface=preface)
-                    dialouges.append(dialouge)
+                    if not any(d.text == text for d in dialouges):
+                        dialouge.text += "\n" + text;
+                        dialouge.preface = preface or dialouge.preface
+                        dialouges.append(dialouge)
+
+speaker_indicator = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0"
+bad_text = """Japanese script from English translation from
+Transcribed and organized
+by Kiriban"""
+fixed_dialouges = []
+# fix issues where dialouge.text will contain multiple speakers
+for old_dialogue in dialouges:
+    # Remove the exact phrase
+    old_dialogue.text = old_dialogue.text.replace(bad_text, "")
+    if speaker_indicator in old_dialogue.text:
+        # Split the line by the speaker indicator to handle multiple speakers
+        parts = line.text.split(speaker_indicator)
+        for i in range(0, len(parts) - 1, 2):  # Iterate in pairs (speaker, dialogue)
+            speaker = parts[i].strip()
+            text = parts[i + 1].strip()
+            if speaker and text:
+                preface = None
+                # Check if the text starts with '(' indicating a preface
+                if text.startswith("(") and ")" in text:
+                    preface = text[1:text.index(")")]  # Extract content inside parentheses
+                    text = text[text.index(")") + 1:].strip()  # Remove the preface from the text
+                if not any(d.text == text for d in fixed_dialouges):
+                    fixed_dialouge = Dialogue(text, speaker, old_dialogue.scene, old_dialogue.episode_number, old_dialogue.season_number, preface=preface)
+                    fixed_dialouges.append(fixed_dialouge)
+    elif not any(d.text == old_dialogue.text for d in fixed_dialouges):
+        fixed_dialouges.append(old_dialogue)
 
 # Turn Dialouge array into a CSV file
-for dialouge in dialouges:
+for dialouge in fixed_dialouges:
     # Get the text, speaker, scene, episode, season, preface, and action
     text = dialouge.text
     speaker = dialouge.speaker
