@@ -2,6 +2,7 @@ import WordCloud from './word-cloud.js';
 import { tabs, createTabs } from './tabs.js';
 import Table from './table.js';
 import PieChart from './pieChart.js';
+import CharMap from './map.js';
 
 let data = [];
 let filteredData = [];
@@ -59,6 +60,20 @@ function renderTabContent(tabName) {
 
         new PieChart(tabContent, data); // 👈 Use the class from table.js
         
+    }
+
+    if (tabName === "Map") {
+        const mapContent = document.getElementById('tab-3');
+        mapContent.innerHTML = '';
+    
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("viewBox", "0 0 736 531");
+        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+        svg.style.width = "100%";
+        svg.style.height = "100%";
+        mapContent.appendChild(svg);
+
+        new CharMap(svg);
     }
 }
 
