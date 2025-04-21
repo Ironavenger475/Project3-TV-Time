@@ -13,7 +13,6 @@
 
   <link rel="stylesheet" href="css/popup.css" />
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/charname.css" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
@@ -103,22 +102,21 @@
   
   <div class="main-layout">
     <div class="left-pane">
-      <img src="image/logo.png" alt="Demon Slayer Logo" height="100px" width="100px" style="display: block; margin-left: auto; margin-right: auto;">
-      <p>search bar</p>
-      <div>
-        <input type="text" id="searchBar" placeholder="Search names..." />
-        <select id="sectionFilter">
-          <option value="all">All Sections</option>
-          <option value="A-M">A–M</option>
-          <option value="N-Z">N–Z</option>
-        </select>
-        <select id="sortBy">
-          <option value="name-asc">Sort: A–Z</option>
-          <option value="name-desc">Sort: Z–A</option>
-          <option value="count-asc">Sort: Dialogue Count ↑</option>
-          <option value="count-desc">Sort: Dialogue Count ↓</option>
-        </select>
-      </div>
+<div class="filter-bar">
+  <input type="text" id="searchBar" placeholder="Search names..." />
+  <select id="sectionFilter">
+    <option value="all">All Sections</option>
+    <option value="A-M">A–M</option>
+    <option value="N-Z">N–Z</option>
+  </select>
+  <select id="sortBy">
+    <option value="name-asc">Sort: A–Z</option>
+    <option value="name-desc">Sort: Z–A</option>
+    <option value="count-asc">Sort: Dialogue Count ↑</option>
+    <option value="count-desc">Sort: Dialogue Count ↓</option>
+  </select>
+</div>
+
       <div id="charname"></div>
     </div>
   

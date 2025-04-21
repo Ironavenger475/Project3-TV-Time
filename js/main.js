@@ -12,8 +12,20 @@ window.onload = () => {
         data = csvData;
         console.log(data)
         createTabs(tabs, renderTabContent);
+        loadCharacterData();
     });
 };
+
+function loadCharacterData() {
+    d3.csv("data/demon-slayer-transcript.csv", d => ({
+      character: d.character,
+      count: +d.count
+    })).then(data => {
+      const filteredData = data.filter(d => d.count > 20 && d.character);
+      window.characterData = filteredData; 
+      initializeFilter(filteredData); 
+    });
+  }
 
 function renderTabContent(tabName) {
     if (tabName === "Word Cloud") {
@@ -59,3 +71,6 @@ function hidePopup() {
 
 continueBtn.addEventListener("click", hidePopup);
 reopenPopupBtn.addEventListener("click", showPopup);
+
+
+
