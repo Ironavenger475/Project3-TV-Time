@@ -11,39 +11,7 @@ class WordTree {
 
     processData(data) {
         // Filter and process data as needed
-        let processedData = new SentenceTrie(this.word);
-        data.forEach(row => {
-            const text = row.text.toLowerCase().split(/[ \n]/).join(" ");
-            // Check if the exact word is present in the text 
-            // (split) makes sure plural versions are not included
-            // (ex. "word" will not match "words")
-            if(!text
-                .replace(/[\.!?]+/g, ' ')
-                .split(' ')
-                .includes(this.word)) {
-                return; // do not process this row
-            }
-        
-            // remove all text before this word (including this word)
-            const textStartingWithWord = text.slice(text.indexOf(this.word) + this.word.length);
-            // get just the word's sentence (check for . ? ! " but ignore ...)
-            const textEndingWithPeriod = textStartingWithWord.split(/[\.\?\!\"]/).filter(d => d.trim() !== "")[0];
-            if(!textEndingWithPeriod) { // if this word is the last word at the end of a sentence
-                return; // stop processing this row
-            }
-            // remove all special characters except '
-            const textWithoutMostSpecialCharacters = textEndingWithPeriod.replace(/[^a-zA-Z’\s']/g, ' ');
-            // remove all extra spaces
-            const cleanedText = textWithoutMostSpecialCharacters.split(" ")
-                .map(t => t.replace(/\s/g, ""))
-                .filter(t => t !== "")
-                .join(" ");
-
-            // Update the tree structure
-            processedData.insert(cleanedText, row.speaker);
-            processedData.root.addSpeaker(row.speaker);
-            processedData.root.weight++;
-        });
+        let processedData = new SentenceTrie(this.word, data);
         // Convert the SentenceTrie structure into a hierarchy compatible with d3
         const convertToHierarchy = (node) => {
             return {

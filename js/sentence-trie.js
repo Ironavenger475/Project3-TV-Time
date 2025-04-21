@@ -19,8 +19,42 @@ class TrieNode {
 }
 
 class SentenceTrie {
-    constructor(word) {
+    constructor(word, data) {
         this.root = new TrieNode(word);
+
+        // convert raw data to a trie!
+        data.forEach(row => {
+            const text = row.text.toLowerCase().split(/[ \n]/).join(" ");
+            // Check if the exact word is present in the text 
+            // (split) makes sure plural versions are not included
+            // (ex. "word" will not match "words")
+            if(!text
+                .replace(/[\.!?]+/g, ' ')
+                .split(' ')
+                .includes(word)) {
+                return; // do not process this row
+            }
+        
+            // remove all text before this word (including this word)
+            const textStartingWithWord = text.slice(text.indexOf(word) + word.length);
+            // get just the word's sentence (check for . ? ! " but ignore ...)
+            const textEndingWithPeriod = textStartingWithWord.split(/[\.\?\!\"]/).filter(d => d.trim() !== "")[0];
+            if(!textEndingWithPeriod) { // if this word is the last word at the end of a sentence
+                return; // stop processing this row
+            }
+            // remove all special characters except '
+            const textWithoutMostSpecialCharacters = textEndingWithPeriod.replace(/[^a-zA-Z’\s']/g, ' ');
+            // remove all extra spaces
+            const cleanedText = textWithoutMostSpecialCharacters.split(" ")
+                .map(t => t.replace(/\s/g, ""))
+                .filter(t => t !== "")
+                .join(" ");
+
+            // Update the tree structure
+            this.insert(cleanedText, row.speaker);
+            this.root.addSpeaker(row.speaker);
+            this.root.weight++;
+        });
     }
 
     removeLowWeightChildren() {
@@ -53,11 +87,10 @@ class SentenceTrie {
                 for (const key of childrenToRemove) {
                     node.children.delete(key);
                 }
-                
-                // Recursively process remaining children
-                for (const child of node.children.values()) {
-                    processChildren(child);
-                }
+            }
+            // Recursively process remaining children
+            for (const child of node.children.values()) {
+                processChildren(child);
             }
         };
 
