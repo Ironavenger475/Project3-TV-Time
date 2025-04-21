@@ -17,7 +17,7 @@ window.onload = () => {
 };
 
 function loadCharacterData() {
-    d3.csv("data/charcount.csv", d => ({
+    d3.csv("data/demon-slayer-transcript.csv", d => ({
         character: d.character,
         count: +d.count
     })).then(charData => {
