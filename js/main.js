@@ -3,6 +3,7 @@ import { tabs, createTabs } from './tabs.js';
 import Table from './table.js';
 import PieChart from './pieChart.js';
 import CharMap from './map.js';
+import { Timeline } from './timeline.js';
 
 let data = [];
 let filteredData = [];
@@ -13,7 +14,8 @@ window.onload = () => {
 
     d3.csv('./data/demon-slayer-transcript.csv').then(csvData => {
         data = csvData.map(d => ({ ...d, character: d.speaker?.trim() }));
-
+        const timeline = new Timeline("timeline", 64, 16);
+        console.log(data)
         createTabs(tabs, renderTabContent);
         // new columns - unique chars and their count
         const characterCountMap = {};
@@ -136,3 +138,4 @@ function hidePopup() {
 
 continueBtn.addEventListener("click", hidePopup);
 reopenPopupBtn.addEventListener("click", showPopup);
+

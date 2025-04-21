@@ -194,3 +194,10 @@ g{
   border-radius: 50%; /* This will make the image a circle */
   object-fit: cover; /* Ensures the image covers the entire circle without distortion */
 }
+  #timeline-labels {
+  position: fixed;
+  bottom: 80px;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+}
