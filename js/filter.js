@@ -1,4 +1,4 @@
-function initializeFilter(characters) {
+function initializeFilter(characters, onCharacterSelect) {
   const charname = document.getElementById("charname");
   const searchBar = document.getElementById("searchBar");
   const sectionFilter = document.getElementById("sectionFilter");
@@ -57,15 +57,17 @@ function initializeFilter(characters) {
 
       button.appendChild(img);
       button.appendChild(span);
+      button.addEventListener("click", () => {
+        onCharacterSelect(char.character);
+      });
+
       charname.appendChild(button);
     });
   }
 
-  // Setup listeners
   searchBar.addEventListener("input", filterAndRender);
   sectionFilter.addEventListener("change", filterAndRender);
   sortBy.addEventListener("change", filterAndRender);
 
-  // Initial render
   filterAndRender();
 }
