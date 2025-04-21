@@ -1,5 +1,7 @@
 import WordCloud from './word-cloud.js';
 import { tabs, createTabs } from './tabs.js';
+import Table from './table.js';
+import PieChart from './pieChart.js';
 
 // Load data from CSV file
 let data = [];
@@ -26,6 +28,20 @@ function renderTabContent(tabName) {
 
         // Initialize the WordCloud object
         new WordCloud(wordCloudContainer, data);
+    }
+    if (tabName === "Phrases") {
+        const tabContent = document.getElementById('tab-2');
+        tabContent.innerHTML = '';
+
+        new Table(tabContent, data); // 👈 Use the class from table.js
+        
+    }
+    if (tabName === "pie chart") {
+        const tabContent = document.getElementById('tab-3');
+        tabContent.innerHTML = '';
+
+        new PieChart(tabContent, data); // 👈 Use the class from table.js
+        
     }
 }
 
