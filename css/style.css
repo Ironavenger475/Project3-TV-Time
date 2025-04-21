@@ -276,6 +276,7 @@ g{
   color: black;
 }
 #timeline-labels {
+ 
   position: fixed;
   bottom: 80px;
   width: 100%;
