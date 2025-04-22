@@ -58,7 +58,7 @@ class CharMap {
         .attr("class", "point-circle")
         .attr("cx", d => d.x)
         .attr("cy", d => d.y)
-        .attr("r", 6)
+        .attr("r", 3)
         .attr("fill","#DC143C")
         .attr("stroke","black")
         .attr("stroke-width",1.5)
@@ -66,7 +66,7 @@ class CharMap {
           this.tooltip1.style("display", "block")
             .html(`<strong>First Appearance: ${d.fp}</strong>`)
             .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 20) + "px");
+            .style("top", (event.pageY ) + "px");
         })
         .on("mouseout", () => {
           this.tooltip1.style("display", "none");
@@ -79,7 +79,7 @@ class CharMap {
         .enter()
         .append("text")
         .attr("class", "point-label")
-        .attr("x", d => d.x + 8)
+        .attr("x", d => d.x + 5)
         .attr("y", d => d.y - 5)
         .text(d => d.name)
         .style('font-size','10px')
