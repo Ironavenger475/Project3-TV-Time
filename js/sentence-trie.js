@@ -72,26 +72,28 @@ class SentenceTrie {
             this.root.children.delete(key);
         }
 
-        // if a node has a weight <1, concat all it's weight <1 children's ancestry
+        // if a node has a weight <1, concat all it's younger kin
         const processChildren = (node) => {
-            if(node.weight <= 1){
-                // First pass: identify nodes to remove
-                const childrenToConcat = [];
-                for (const [key, child] of node.children) {
-                    if (child.weight <= 1) {
-                        childrenToConcat.push(key);
-                    }
+            if(node.children.size <= 1){
+                // weight 1 means only 1 child for each node
+                const childrenToConcat = [node.word];
+                let child = node.children.entries().next().value;
+                while(child){
+                    childrenToConcat.push(child[1].word)
+                    child = child[1].children.entries().next()?.value;
                 }
-            
 
-                // Second pass: concat ancestry
-                for (const key of childrenToConcat) {
-                    node.children.delete(key);
-                }
+                // remove all (1) children
+                node.children.clear();
+
+                // concatttt
+                node.word = childrenToConcat.join(" ")
             }
-            // Recursively process remaining children
-            for (const child of node.children.values()) {
-                processChildren(child);
+            else{
+                // Recursively process remaining children
+                for (const child of node.children.values()) {
+                    processChildren(child);
+                }
             }
         };
 

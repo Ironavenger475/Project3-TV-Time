@@ -149,7 +149,8 @@ class WordCloud {
         .style('background', '#fff')
         .style('border', '1px solid #ccc')
         .style('box-shadow', '0 4px 8px rgba(0, 0, 0, 0.2)')
-        .style('z-index', 2);
+        .style('z-index', 2)
+        .style('overflow', "hidden");
 
         // Add header container for fixed elements
         const header = popup.append('div')
@@ -209,8 +210,9 @@ class WordCloud {
         const treeContainer = popup.append('div')
         .attr('class', 'tree-container')
         .style('overflow-y', 'auto')
-        .style('height', 'calc(100% - 60px)')
-        .style('padding', '10px');
+        .style('height', '100%')
+        .style('position', 'relative')
+        .style('padding', '0px');
 
         // Render the tree using the WordTree class
         new WordTree(treeContainer.node(), word, this.fullData);

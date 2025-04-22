@@ -23,7 +23,7 @@ class WordTree {
         };
 
         // remove all weight 1 children of root
-        //processedData.removeLowWeightChildren();
+        processedData.removeLowWeightChildren();
 
         const convertedData = convertToHierarchy(processedData.root)
         console.log(convertedData);
@@ -58,8 +58,10 @@ class WordTree {
             .attr("width", width)
             .attr("height", height)
             .style("overflow", "visible")
+            .style("position", "absolute")
+            .style("left", "0")
             .append("g")
-            .attr("transform", `translate(${Math.abs(yExtent[0]) + 100},${Math.abs(xExtent[0]) + 100})`); // Center the tree
+            .attr("transform", `translate(${Math.abs(yExtent[0]) + 50},${Math.abs(xExtent[0]) + 100})`); // Center the tree
 
         // Add links between nodes
         const link = svg.selectAll(".link")
@@ -81,7 +83,7 @@ class WordTree {
 
         const pieChartRadius = this.hoverRadius; // Default radius for pie charts
 
-        node.append("g")
+        const pieDots = node.append("g")
             .each(function(d) {
                 const nodeGroup = d3.select(this);
                 const radius = 5;
@@ -104,11 +106,12 @@ class WordTree {
             });
 
         // Make piecharts bigger on mouseover to see pie chart info
-        node.on("mouseover", function(event, d) {
-            const nodeGroup = d3.select(this);
+        pieDots.on("mouseover", function(event, d) {
+            const nodeGroup = d3.select(this.parentNode);
 
             // Bring the node to the front by increasing z-index
             nodeGroup.raise();
+            d3.select(this).raise();
 
             // Increase the size of the node or pie chart
             const pie = d3.pie().value(([_, weight]) => weight);
@@ -139,9 +142,25 @@ class WordTree {
                 .data(pie(pieData))
                 .enter()
                 .append("text")
+                .attr("transform", d=>{
+                    if(!d.expanded){
+                        d.expanded = true
+                        return `translate(0,0)`
+                    }
+                    let [x, y] = arc.centroid(d);
+                    if(x < .00001 & x > -.0001){ // only 1
+                        y = -20;
+                    }
+                    return `translate(${x*1.75},${y*1.75})`;
+                })
+                .transition()
+                .duration(200)
                 .attr("class", "pie-label")
                 .attr("transform", d => {
-                    const [x, y] = arc.centroid(d);
+                    let [x, y] = arc.centroid(d);
+                    if(x < .00001 & x > -.0001){ // only 1
+                        y = -20;
+                    }
                     return `translate(${x*1.75},${y*1.75})`;
                 })
                 .attr("dy", "0.35em")
@@ -151,7 +170,7 @@ class WordTree {
                 .style("pointer-events", "none"); // Prevent labels from interfering with mouseover
         })
         .on("mouseout", function(event, d) {
-            const nodeGroup = d3.select(this);
+            const nodeGroup = d3.select(this.parentNode);
 
             // Reset the size of the node or pie chart
             const radius = 5;
@@ -171,7 +190,7 @@ class WordTree {
                 .transition()
                 .duration(200)
                 .attr("y", 3) // Reset to default position
-                .attr("x", 0) // Reset to centered position
+                .attr("x", d => d.children ? -10 : 10)
                 .style("text-anchor", "start") // Reset to default alignment
                 .style("font-weight", "normal")
                 .style("text-shadow", "none"); // Remove dropshadow
