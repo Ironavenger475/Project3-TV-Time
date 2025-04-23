@@ -7,7 +7,7 @@ import CharMap from './map.js';
 let data = [];
 let filteredData = [];
 let currentCharacter = null;
-
+let charMapInstance = null;
 window.onload = () => {
     showPopup();
     d3.csv('./data/demon-slayer-transcript.csv').then(csvData => {
@@ -30,8 +30,12 @@ function loadCharacterData() {
 
 function onCharacterSelect(characterName) {
     currentCharacter = characterName;
+    const lowerName = characterName.toLowerCase();
     filteredData = data.filter(d => d.speaker === characterName);
     updateWordCloud(); // Re-render if active
+    if (charMapInstance) {
+        charMapInstance.moveCharacter(lowerName); // 👈 Pass lowercase to map
+    }
 }
 
 function renderTabContent(tabName) {
@@ -54,7 +58,7 @@ function renderTabContent(tabName) {
         new Table(tabContent, data); // 👈 Use the class from table.js
         
     }
-    if (tabName === "pie chart") {
+    if (tabName === "Pie Chart") {
         const tabContent = document.getElementById('tab-3');
         tabContent.innerHTML = '';
 
@@ -63,7 +67,7 @@ function renderTabContent(tabName) {
     }
 
     if (tabName === "Map") {
-        const mapContent = document.getElementById('tab-3');
+        const mapContent = document.getElementById('tab-4');
         mapContent.innerHTML = '';
     
         const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -73,7 +77,7 @@ function renderTabContent(tabName) {
         svg.style.height = "100%";
         mapContent.appendChild(svg);
 
-        new CharMap(svg);
+        charMapInstance = new CharMap(svg);
     }
 }
 

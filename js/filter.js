@@ -47,7 +47,7 @@ function initializeFilter(characters, onCharacterSelect) {
       button.className = "char-button";
 
       const img = document.createElement("img");
-      img.src = `${char.character}.png`;
+      img.src = `charimages/${char.character}.png`;
       img.alt = `${char.character} image`;
       img.className = "char-img";
 
@@ -59,6 +59,7 @@ function initializeFilter(characters, onCharacterSelect) {
       button.appendChild(span);
       button.addEventListener("click", () => {
         onCharacterSelect(char.character);
+        console.log(char.character)
       });
 
       charname.appendChild(button);

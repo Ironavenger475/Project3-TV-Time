@@ -190,3 +190,7 @@ g{
   white-space: nowrap;
 }
 
+.character-image {
+  border-radius: 50%; /* This will make the image a circle */
+  object-fit: cover; /* Ensures the image covers the entire circle without distortion */
+}
