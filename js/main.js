@@ -85,7 +85,6 @@ function renderTabContent(tabName) {
         tabContent.appendChild(pieContainer);
         updatePie()
         
-        new Table(tabContent, data);
     }
 
     if (tabName === "Map") {
