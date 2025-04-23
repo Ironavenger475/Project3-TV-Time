@@ -1,8 +1,9 @@
 import SentenceTrie from "./sentence-trie.js";
 
 class WordTree {
-    constructor(container, word, data) {
-        this.container = d3.select(container);
+    constructor(popup, container, word, data) {
+        this.popup = popup
+        this.container = container;
         this.word = word.toLowerCase();
         this.data = this.processData(data);
         this.hoverRadius = 75;
@@ -68,10 +69,12 @@ class WordTree {
             .data(treeData.links())
             .enter().append("path")
             .attr("class", "link")
+            .attr("fill", "none")
             .attr("d", d3.linkHorizontal()
                 .x(d => d.y)
                 .y(d => d.x))
-            .style("stroke", "#999") // Set line color
+            .style("stroke", "black") // Set line color
+            .style("opacity", ".2") // Set line color
             .style("stroke-width", "2px"); // Set line thickness
 
         // Add nodes
@@ -206,7 +209,8 @@ class WordTree {
             .text(d => d.data.word);
 
         // Add legend for speakers
-        const legendContainer = this.container.append("svg")
+        const legendContainer = this.popup.append("svg")
+            .attr("class", "legend")
             .style("position", "absolute")
             .style("top", "65px")
             .style("right", "-225px");
@@ -229,6 +233,51 @@ class WordTree {
                 .style("text-anchor", "start")
                 .style("font-size", "12px");
         });
+
+        //scroll to center
+
+        this.scrollToNode();
+    }
+    
+    scrollToNode() {
+        const container = this.container;
+        const svg = d3.select('svg');
+        
+        // Find the node matching this.word
+        const targetNode = svg.selectAll('.node')
+            .filter(d => d.data.word.toLowerCase() === this.word.toLowerCase());
+            
+        if (targetNode.empty()) {
+            console.warn(`No node found matching word: ${this.word}`);
+            return;
+        }
+        
+        // Get the dimensions of the container and SVG
+        const containerRect = container.node().getBoundingClientRect();
+        const containerCenterX = containerRect.width / 2;
+        const containerCenterY = containerRect.height / 2;
+        
+        // Get the text element position
+        const textElement = targetNode.select('text');
+        const nodeRect = textElement.node().getBoundingClientRect();
+        
+        // Calculate the target position for the node
+        const targetX = nodeRect.left + nodeRect.width / 2;
+        const targetY = nodeRect.top + nodeRect.height / 2;
+        
+        // Get the current transformation matrix
+        const currentTransform = d3.transform(svg.attr('transform'));
+        const currentX = currentTransform.translate[0];
+        const currentY = currentTransform.translate[1];
+        
+        // Calculate the new translation needed to center the node
+        const newX = -(targetX - containerCenterX);
+        const newY = -(targetY - containerCenterY);
+        
+        // Animate the transition smoothly
+        svg.transition()
+            .duration(750)
+            .attr('transform', `translate(${newX},${newY})`);
     }
 }
 

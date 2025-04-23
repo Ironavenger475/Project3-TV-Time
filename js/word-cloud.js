@@ -215,7 +215,7 @@ class WordCloud {
         .style('padding', '0px');
 
         // Render the tree using the WordTree class
-        new WordTree(treeContainer.node(), word, this.fullData);
+        new WordTree(popup, treeContainer, word, this.fullData);
 
         // Make the popup draggable
         this.makeDraggable(popup.node());
