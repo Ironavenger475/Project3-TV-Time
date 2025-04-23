@@ -32,9 +32,9 @@ function onCharacterSelect(characterName) {
     currentCharacter = characterName;
     const lowerName = characterName.toLowerCase();
     filteredData = data.filter(d => d.speaker === characterName);
-    updateWordCloud(); // Re-render if active
+    updateWordCloud(); 
     if (charMapInstance) {
-        charMapInstance.moveCharacter(lowerName); // 👈 Pass lowercase to map
+        charMapInstance.moveCharacter(lowerName); 
     }
 }
 
@@ -55,14 +55,14 @@ function renderTabContent(tabName) {
         const tabContent = document.getElementById('tab-2');
         tabContent.innerHTML = '';
 
-        new Table(tabContent, data); // 👈 Use the class from table.js
+        new Table(tabContent, data); 
         
     }
     if (tabName === "Pie Chart") {
         const tabContent = document.getElementById('tab-3');
         tabContent.innerHTML = '';
 
-        new PieChart(tabContent, data); // 👈 Use the class from table.js
+        new PieChart(tabContent, data); 
         
     }
 

@@ -126,10 +126,8 @@ class CharMap {
       this.svg.select("#character-image").remove();
       this.svg.select("#movement-trail").remove();
       this.svg.select("#character-circle").remove();
-      // Draw trail
       this.svg.selectAll(".trail-segment").remove();
 
-// Define some distinct colors
 const segmentColors = ["#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", "#bcf60c", "#fabebe"];
 
 // Draw individual segments
@@ -151,7 +149,7 @@ for (let i = 0; i < visitedPoints.length - 1; i++) {
 this.drawLabels();
       // Add character image if exists
       const imgPath = `charimages/${nameLower}.png`;
-const self = this; // capture correct `this` context
+const self = this; 
 let characterNode;
 
 // Animate function if image is available
@@ -176,7 +174,7 @@ const animateImage = () => {
   this.labelGroup.raise();
 };
 this.labelGroup.raise();
-// Try to load image
+
 const img = this.svg.append("image")
   .attr("id", "character-image")
   .attr("class", "char-imgs")
