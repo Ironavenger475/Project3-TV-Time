@@ -83,7 +83,7 @@ class PieChart {
             .attr("fill", d => color(d.data.label))
             .on("mouseover", function (event, d) {
                 tooltip.style.display = 'block';
-                tooltip.textContent = `Lines: ${d.data.value}`;
+                tooltip.textContent = `${d.data.value} lines`;
                 d3.select(this)
                     .attr("stroke", "black")
                     .attr("stroke-width", 2);
