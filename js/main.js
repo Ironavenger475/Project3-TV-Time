@@ -33,6 +33,7 @@ function onCharacterSelect(characterName) {
     const lowerName = characterName.toLowerCase();
     filteredData = data.filter(d => d.speaker === characterName);
     updateWordCloud(); 
+    updateTable();
     if (charMapInstance) {
         charMapInstance.moveCharacter(lowerName); 
     }
@@ -54,8 +55,10 @@ function renderTabContent(tabName) {
     if (tabName === "Phrases") {
         const tabContent = document.getElementById('tab-2');
         tabContent.innerHTML = '';
-
-        new Table(tabContent, data); 
+        const tableContainer = document.createElement('div');
+        tableContainer.id = 'table-container';
+        tabContent.appendChild(tableContainer);
+        updateTable()
         
     }
     if (tabName === "Pie Chart") {
@@ -87,6 +90,13 @@ function updateWordCloud() {
     container.innerHTML = '';
     const cloudData = currentCharacter ? filteredData : data;
     new WordCloud(container, cloudData);
+}
+function updateTable() {
+    const container = document.getElementById('table-container');
+    if (!container) return;
+    container.innerHTML = '';
+    const tableData = currentCharacter ? filteredData : data;
+    new Table(container, tableData);
 }
 
 const overlay = document.getElementById("overlay");
