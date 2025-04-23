@@ -1,6 +1,8 @@
 function initializeFilter(characters, onCharacterSelect) {
   const charname = document.getElementById("charname");
   const searchBar = document.getElementById("searchBar");
+  searchBar.style.borderRadius='10px';
+  searchBar.style.borderStyle='initial';
   const sectionFilter = document.getElementById("sectionFilter");
   const sortBy = document.getElementById("sortBy");
 
@@ -40,6 +42,20 @@ function initializeFilter(characters, onCharacterSelect) {
     renderButtons(filtered);
   }
 
+  function checkImageExists(url, callback) {
+    const img = new Image();
+    img.onload = () => callback(true);
+    img.onerror = () => callback(false);
+    img.src = url;
+  }
+
+  function preloadImage(src, callback) {
+    const img = new Image();
+    img.onload = () => callback(src); // valid
+    img.onerror = () => callback('image/default1.png'); // fallback
+    img.src = src;
+  }
+
   function renderButtons(characters) {
     charname.innerHTML = "";
     characters.forEach(char => {
@@ -47,9 +63,15 @@ function initializeFilter(characters, onCharacterSelect) {
       button.className = "char-button";
 
       const img = document.createElement("img");
-      img.src = `charimages/${char.character}.png`;
+      preloadImage(`charimages/${char.character}.png`, finalSrc => {
+  img.src = finalSrc;
+});
       img.alt = `${char.character} image`;
       img.className = "char-img";
+      img.onerror = function() {
+      this.onerror = null; 
+      this.src = 'image/default1.png'; 
+    };
 
       const span = document.createElement("span");
       span.textContent = char.character;
