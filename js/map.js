@@ -173,6 +173,7 @@ const animateImage = () => {
   };
 
   moveNext();
+  this.labelGroup.raise();
 };
 this.labelGroup.raise();
 // Try to load image
@@ -216,6 +217,7 @@ const img = this.svg.append("image")
   .on("load", function () {
     characterNode = d3.select(this);
     animateImage();
+    this.labelGroup.raise();
   });
     };
     if (this.csvCache) {
