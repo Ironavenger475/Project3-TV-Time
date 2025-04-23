@@ -174,4 +174,3 @@ function hidePopup() {
 
 continueBtn.addEventListener("click", hidePopup);
 reopenPopupBtn.addEventListener("click", showPopup);
-
