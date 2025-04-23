@@ -1,161 +1,76 @@
-speaker,count
-Tanjirou,5293
-Zenitsu,1021
-Inosuke,942
-Uzui,503
-Tokitou,441
-Nezuko,420
-Daki,350
-Slayer,338
-Genya,319
-Kanroji,272
-Kotetsu,223
-Shinobu,209
-Tamayo,207
-Akaza,203
-Gyokko,198
-Man,182
-Tomi,179
-Demon,172
-Tomioka,152
-Rui,151
-Iguro,147
-Slayers,146
-Enmu,131
-Gotou,115
-Crow,114
-Kiyo,97
-Kagaya,96
-Aoi,87
-Boy,76
-Sister,76
-Fuku,70
-Kakushi,69
-Murata,68
-Father,68
-Yahaba,66
-Mother,63
-Rengoku,63
-Suma,63
-Douma,63
-Girl,61
-Slasher,59
-Makio,56
-Brother,55
-Kyougai,54
-Owner,51
-Sekido,50
-Kie,49
-Kanao,49
-Karaku,49
-Kazumi,47
-Y.Genya,47
-Woman,45
-Tecchin,45
-Urogi,44
-Sabito,43
-Demons,42
-Himejima,38
-Muzan,37
-Amane,37
-Teruko,30
-Kiyoshi,30
-Hanako,29
-Mukago,28
-Urami,28
-Kibutsuji,28
-Sumi,27
-Takeo,26
-Chef,26
-Samurai,25
-Shigeru,23
-Yoriichi,21
-Aizetsu,21
-Naho,20
-Makomo,19
-Hisa,17
-Chief,17
-Madam,17
-Kiriya,16
-Rokuro,16
-O.Sister,15
-Kanae,15
-Kanata,14
-Ruka,14
-Nakime,14
-Doctor,13
-Obi,13
-Omitsu,13
-Boy 1,12
-Hinaki,12
-Saburou,11
-Slayer 1,11
-Wives,10
-Kizuki,9
-Girl 1,9
-Hinatsuru,9
-Man 2,8
-Kaigaku,8
-Trio,8
-Boys,8
-Slayer 2,8
-Children,7
-Nichika,7
-Tatsu,7
-Rokuta,7
-"Prostitute 2     But she sure is ugly. I’m surprised that she got taken in
-here. Prostitute 3",7
-Farmer,6
-Boy 2,6
-Man 1,5
-Worker,5
-Master,5
-Teiko,5
-Fiance,5
-Maid,5
-Tokie,4
-Group,4
-Villagers,4
-Mice,4
-Suyako,4
-Rei,3
-Giyuu,3
-Y.Kanao,3
-Girl 2,3
-❹逸,3
-Guest,3
-Hiroshi,3
-Shizu,3
-Hashira,3
-Kakushis,2
-Girls,2
-"Owner,",2
-Owners,2
-"Daki,",2
-"Swordsmiths    Ahh! Demon      Urahh!
-Swordsmith    Ngh! Demon",2
-Soldier,2
-Haganezuka      Ngh… I’ll kill you! Gotou,2
-"Toki.Crow         Oh, shut up, bottom-feeder! Tan.Crow  What?! Why don’t you shut up?! Toki.Crow         I’m not the one who needs
-to shut up! Tan.Crow",2
-Man 3,1
-"What kind of talk is that, Mr. Pissed-My-Pants? Murata",1
-Hashiras,1
-"But it tastes so gross! There’s only so much gross a
-person can take! Aoi",1
-Workers,1
-Rengoku          I only just took care of it now. Slayer,1
-"Proprietress    Would
-they just shut up?
-Tanjirou   That's not what I meant! Inosuke",1
-Gyuutarou       Grr… Uzui,1
-Cultist,1
-Shuuya,1
-Sanemi,1
-Kanorji,1
-Soldiers,1
-"(Thoughts) There’s only hell in store for us! Uzui          Come on! Keep it together, dammit!
-Jeez… Tanjirou",1
-"Winner, Lord Tokitou… Tanjirou",1
-Crows,1
-0,0
+speakers
+Tanjirou
+Zenitsu
+Inosuke
+Uzui
+Tokitou
+Nezuko
+Daki
+Slayer
+Genya
+Kanroji
+Kotetsu
+Shinobu
+Tamayo
+Akaza
+Gyokko
+Man
+Tomi
+Demon
+Tomioka
+Rui
+Iguro
+Slayers
+Enmu
+Gotou
+Crow
+Kiyo
+Kagaya
+Aoi
+Boy
+Sister
+Fuku
+Kakushi
+Murata
+Father
+Yahaba
+Mother
+Rengoku
+Suma
+Douma
+Girl
+Slasher
+Makio
+Brother
+Kyougai
+Owner
+Sekido
+Kie
+Kanao
+Karaku
+Kazumi
+Y.Genya
+Woman
+Tecchin
+Urogi
+Sabito
+Demons
+Himejima
+Muzan
+Amane
+Teruko
+Kiyoshi
+Hanako
+Mukago
+Urami
+Kibutsuji
+Sumi
+Takeo
+Chef
+Samurai
+Shigeru
+Yoriichi
+Aizetsu
+Naho
+Makomo
+Hashira
