@@ -33,6 +33,8 @@ function onCharacterSelect(characterName) {
     const lowerName = characterName.toLowerCase();
     filteredData = data.filter(d => d.speaker === characterName);
     updateWordCloud(); 
+    updateTable();
+    updatePie();
     if (charMapInstance) {
         charMapInstance.moveCharacter(lowerName); 
     }
@@ -54,15 +56,19 @@ function renderTabContent(tabName) {
     if (tabName === "Phrases") {
         const tabContent = document.getElementById('tab-2');
         tabContent.innerHTML = '';
-
-        new Table(tabContent, data); 
+        const tableContainer = document.createElement('div');
+        tableContainer.id = 'table-container';
+        tabContent.appendChild(tableContainer);
+        updateTable()
         
     }
     if (tabName === "Pie Chart") {
         const tabContent = document.getElementById('tab-3');
         tabContent.innerHTML = '';
-
-        new PieChart(tabContent, data); 
+        const pieContainer = document.createElement('div');
+        pieContainer.id = 'pie-container';
+        tabContent.appendChild(pieContainer);
+        updatePie()
         
     }
 
@@ -88,7 +94,20 @@ function updateWordCloud() {
     const cloudData = currentCharacter ? filteredData : data;
     new WordCloud(container, cloudData);
 }
-
+function updateTable() {
+    const container = document.getElementById('table-container');
+    if (!container) return;
+    container.innerHTML = '';
+    const tableData = currentCharacter ? filteredData : data;
+    new Table(container, tableData);
+}
+function updatePie() {
+    const container = document.getElementById('pie-container');
+    if (!container) return;
+    container.innerHTML = '';
+    const pieData = currentCharacter ? filteredData : data;
+    new PieChart(container, pieData);
+}
 const overlay = document.getElementById("overlay");
 const continueBtn = document.getElementById("continueBtn");
 const reopenPopupBtn = document.getElementById("reopenPopupBtn");
