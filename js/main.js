@@ -9,7 +9,7 @@ window.onload = () => {
     showPopup();
     d3.csv('./data/demon-slayer-transcript.csv').then(csvData => {
         data = csvData;
-        const timeline = new Timeline("timeline", 64, 16);
+        const timeline = new Timeline("timeline");
         console.log(data)
         createTabs(tabs, renderTabContent);
     });
