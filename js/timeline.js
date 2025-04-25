@@ -1,5 +1,5 @@
 export class Timeline {
-  constructor(containerId, totalEpisodes = 64, episodesPerSeason = 16) {
+  constructor(containerId, totalEpisodes = 64, episodesPerSeason = 16, onSelectRange = () => {}) {
     this.containerId = containerId;
     this.totalEpisodes = totalEpisodes;
     this.episodesPerSeason = episodesPerSeason;
@@ -8,6 +8,7 @@ export class Timeline {
     this.dragging = false;
     this.startIndex = null;
     this.endIndex = null;
+    this.onSelectRange = onSelectRange;
 
     this.renderTimeline();
   }
@@ -161,6 +162,7 @@ export class Timeline {
     }
   
     this.logSelectedRange();
+    this.onSelectRange(this.selectedRange);
   }
 
   updateSelection() {
