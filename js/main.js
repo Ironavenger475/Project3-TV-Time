@@ -46,7 +46,7 @@ window.onload = () => {
                 .filter(d => d.count > 20);
 
             window.characterData = charData;
-            initializeFilter(charData, onCharacterSelect);
+            initializeFilter(charData, handleCharacterToggle);
 
             hideLoading();
         })
@@ -56,6 +56,7 @@ window.onload = () => {
             setTimeout(() => hideLoading(), 1500);
         });
 };
+
 
 function handleCharacterToggle(character, isChecked) {
     if (isChecked) {
