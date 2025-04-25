@@ -129,14 +129,6 @@ function renderTabContent(tabName) {
         tabContent.appendChild(tableContainer);
         updateTable();
     }
-    if (tabName === "More Info") {
-        const tabContent = document.getElementById('tab-3');
-        tabContent.innerHTML = '';
-        const pieContainer = document.createElement('div');
-        pieContainer.id = 'pie-container';
-        tabContent.appendChild(pieContainer);
-        updatePie();
-    }
 
     if (tabName === "Map") {
         const mapContent = document.getElementById('tab-2');
@@ -148,6 +140,16 @@ function renderTabContent(tabName) {
         svg.style.height = "100%";
         mapContent.appendChild(svg);
         charMapInstance = new CharMap(svg);
+    }
+
+    if (tabName === "More Info") {
+        const tabContent = document.getElementById('tab-3');
+        tabContent.innerHTML = '';
+        const pieContainer = document.createElement('div');
+        pieContainer.id = 'pie-container';
+        tabContent.appendChild(pieContainer);
+        
+        updatePie();
     }
 }
 
@@ -183,52 +185,61 @@ function updatePie() {
     const pieChartContainer2 = document.createElement('div');
     pieChartContainer2.style.width = '55%'; // Same width as the other pie chart
     pieWrapper.appendChild(pieChartContainer2);
-    const pieData = currentCharacter ? filteredData : data;
-    new PieChart(pieChartContainer1, pieData);
-    new DialoguePieChart(pieChartContainer2, pieData);
-    if (currentCharacter) {
-        const characterStats = new CharacterStats(filteredData);  // Use filtered data
 
-        // Get character stats using the selected character
-        const stats = characterStats.getCharacterStats(currentCharacter);
+    new PieChart(pieChartContainer1, filteredData);
+    new DialoguePieChart(pieChartContainer2, filteredData);
+    console.log("Current Characters:", selectedCharacters);
+    console.log("filteredData length:", filteredData.length);
+     
+        const characterStats = new CharacterStats(filteredData);
+        
+        // Create a wrapper for character stats with horizontal layout
+        const statsWrapper = document.createElement('div');
+        statsWrapper.style.display = 'flex';
+        statsWrapper.style.flexWrap = 'wrap'; // Wrap to new line if too many
+        statsWrapper.style.gap = '20px'; // Space between each stats box
+        statsWrapper.style.marginTop = '20px';
+        container.appendChild(statsWrapper);
 
-        // Create the stats box container
-        const statsBox = document.createElement('div');
-        statsBox.style.marginTop = '10px';
-        statsBox.style.fontSize = '14px';
-        statsBox.style.lineHeight = '1.6';
+        selectedCharacters.forEach(name => {
+            const stats = characterStats.getCharacterStats(name);
+            console.log(`Generating stats for: ${name}`);
+console.log("Stats:", stats);
+            const statsBox = document.createElement('div');
+            statsBox.style.flex = '1 1 200px'; // Responsive width, min 200px
+            statsBox.style.border = '1px solid #ccc';
+            statsBox.style.padding = '10px';
+            statsBox.style.borderRadius = '8px';
+            statsBox.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            statsBox.style.backgroundColor = '#fafafa';
 
-        // Title with the character name
-        const charTitle = document.createElement('strong');
-        charTitle.textContent = `Stats for ${currentCharacter}`;
-        statsBox.appendChild(charTitle);
+            const charTitle = document.createElement('strong');
+            charTitle.textContent = `Stats for ${name}`;
+            statsBox.appendChild(charTitle);
 
-        // Season count
-        const seasonInfo = document.createElement('div');
-        seasonInfo.textContent = `Seasons Appeared: ${stats.totalSeasons}`;
-        statsBox.appendChild(seasonInfo);
+            const seasonInfo = document.createElement('div');
+            seasonInfo.textContent = `Seasons Appeared: ${stats.totalSeasons}`;
+            statsBox.appendChild(seasonInfo);
 
-        // Episode count
-        const episodeInfo = document.createElement('div');
-        episodeInfo.textContent = `Episodes Appeared: ${stats.totalEpisodes}`;
-        statsBox.appendChild(episodeInfo);
+            const episodeInfo = document.createElement('div');
+            episodeInfo.textContent = `Episodes Appeared: ${stats.totalEpisodes}`;
+            statsBox.appendChild(episodeInfo);
 
-        const dialogueInfo = document.createElement('div');
-        dialogueInfo.textContent = `Total Dialogue: ${stats.totalDialogue} lines`;
-        statsBox.appendChild(dialogueInfo);
+            const dialogueInfo = document.createElement('div');
+            dialogueInfo.textContent = `Total Dialogue: ${stats.totalDialogue} lines`;
+            statsBox.appendChild(dialogueInfo);
 
-        let link = `https://kimetsu-no-yaiba.fandom.com/wiki/Special:Search?query=${currentCharacter}&scope=internal&contentType=&ns%5B0%5D=0&ns%5B1%5D=2900`;        const linkInfo = document.createElement('div');
-        const anchor = document.createElement('a');
-        anchor.href = link; // Set the href to the link
-        anchor.textContent = `More Info on ${currentCharacter}`; // Text to display for the link
-        anchor.target = "_blank"; // Optional: Open in a new tab
-        linkInfo.appendChild(anchor);
+            const linkInfo = document.createElement('div');
+            const anchor = document.createElement('a');
+            anchor.href = `https://kimetsu-no-yaiba.fandom.com/wiki/Special:Search?query=${encodeURIComponent(name)}&scope=internal`;
+            anchor.textContent = `More Info on ${name}`;
+            anchor.target = "_blank";
+            linkInfo.appendChild(anchor);
+            statsBox.appendChild(linkInfo);
 
-        // Add the linkInfo div to the statsBox
-        statsBox.appendChild(linkInfo);
-        // Append the stats box to the container
-        container.appendChild(statsBox);
-    }
+            statsWrapper.appendChild(statsBox);
+        });
+    
 }
 
 const overlay = document.getElementById("overlay");

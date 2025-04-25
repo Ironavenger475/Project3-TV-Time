@@ -96,8 +96,8 @@ class CharMap {
 
   moveCharacters(characterNames) {
     const self = this;
-    console.log("Character Names:", characterNames);
-    console.log("this.points:", this.points);
+    // console.log("Character Names:", characterNames);
+    // console.log("this.points:", this.points);
     // Ensure all values are strings
     characterNames = characterNames.map(name => String(name).trim());
   
