@@ -10,9 +10,10 @@ import DialoguePieChart from './dialoguepiechart.js';
 
 let data = [];
 let filteredData = [];
-let currentCharacter = null;
+let selectedCharacters = new Set();
 let charMapInstance = null;
 let characterStats = null;
+
 window.onload = () => {
     showLoading("Loading Demon Slayer transcript...");
     showPopup();
@@ -56,43 +57,52 @@ window.onload = () => {
         });
 };
 
-function onEpisodeRangeSelect(selectedEpisodes) {
-    window.selectedEpisodeSet = new Set(selectedEpisodes.map(ep => `S${ep.season}E${ep.episode}`));
-
-    const base = data.filter(d => window.selectedEpisodeSet.has(`S${+d.season}E${+d.episode}`));
-
-    if (selectedEpisodes.length === 0) {
-        window.selectedEpisodeSet = null;
-        filteredData = currentCharacter ? data.filter(d => d.character === currentCharacter) : data;
+function handleCharacterToggle(character, isChecked) {
+    if (isChecked) {
+        if (selectedCharacters.size >= 3) {
+            alert("You can only select up to 3 characters.");
+            document.querySelector(`input[data-character="${character}"]`).checked = false;
+            return;
+        }
+        selectedCharacters.add(character);
     } else {
-        window.selectedEpisodeSet = new Set(selectedEpisodes.map(ep => `S${ep.season}E${ep.episode}`));
-        const base = data.filter(d => window.selectedEpisodeSet.has(`S${+d.season}E${+d.episode}`));
-        filteredData = currentCharacter ? base.filter(d => d.character === currentCharacter) : base;
+        selectedCharacters.delete(character);
     }
-
-    updateWordCloud();
-    updateTable();
-    updatePie();
+    applyFilters();
 }
 
-function onCharacterSelect(characterName) {
-    currentCharacter = characterName;
-    const lowerName = characterName.toLowerCase();
+function onEpisodeRangeSelect(selectedEpisodes) {
+    window.selectedEpisodeSet = selectedEpisodes.length > 0 
+        ? new Set(selectedEpisodes.map(ep => `S${ep.season}E${ep.episode}`)) 
+        : null;
 
-    const base = window.selectedEpisodeSet 
-        ? data.filter(d => window.selectedEpisodeSet.has(`S${+d.season}E${+d.episode}`)) 
-        : data;
+    applyFilters();
+}
 
-    filteredData = data.filter(d => d.speaker === characterName);
+function applyFilters() {
+    const selectedCharArr = Array.from(selectedCharacters);
+    if (selectedCharArr.length === 0) {
+        filteredData = window.selectedEpisodeSet 
+            ? data.filter(d => window.selectedEpisodeSet.has(`S${+d.season}E${+d.episode}`)) 
+            : data;
+    } else {
+        let base = window.selectedEpisodeSet 
+            ? data.filter(d => window.selectedEpisodeSet.has(`S${+d.season}E${+d.episode}`)) 
+            : data;
 
-    updateWordCloud(); 
+        const grouped = d3.groups(base, d => `S${d.season}E${d.episode}`);
+        const validEpisodes = grouped.filter(([, rows]) => {
+            const episodeChars = new Set(rows.map(r => r.character));
+            return selectedCharArr.every(c => episodeChars.has(c));
+        });
+
+        const validKeys = new Set(validEpisodes.map(([key]) => key));
+        filteredData = base.filter(d => selectedCharArr.includes(d.character) && validKeys.has(`S${d.season}E${d.episode}`));
+    }
+
+    updateWordCloud();
     updateTable();
     updatePie();
-    if (charMapInstance) {
-        charMapInstance.moveCharacter(lowerName); 
-    }
-    filteredData = data.filter(d => d.character === characterName);
-    updateWordCloud();
 }
 
 function renderTabContent(tabName) {
@@ -108,14 +118,12 @@ function renderTabContent(tabName) {
         new WordCloud(wordCloudContainer, data);
         updateWordCloud();
     }
+
     if (tabName === "Phrases") {
-        const tabContent = document.getElementById('tab-1');
-        tabContent.innerHTML = '';
         const tableContainer = document.createElement('div');
         tableContainer.id = 'table-container';
         tabContent.appendChild(tableContainer);
-        updateTable()
-        
+        updateTable();
     }
     if (tabName === "More Info") {
         const tabContent = document.getElementById('tab-3');
@@ -123,21 +131,18 @@ function renderTabContent(tabName) {
         const pieContainer = document.createElement('div');
         pieContainer.id = 'pie-container';
         tabContent.appendChild(pieContainer);
-        updatePie()
-        
+        updatePie();
     }
 
     if (tabName === "Map") {
         const mapContent = document.getElementById('tab-2');
         mapContent.innerHTML = '';
-    
         const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svg.setAttribute("viewBox", "0 0 736 531");
         svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
         svg.style.width = "100%";
         svg.style.height = "100%";
         mapContent.appendChild(svg);
-
         charMapInstance = new CharMap(svg);
     }
 }
@@ -146,15 +151,13 @@ function updateWordCloud() {
     const container = document.getElementById('word-cloud-container');
     if (!container) return;
     container.innerHTML = '';
-    const cloudData = currentCharacter ? filteredData : data;
-    new WordCloud(container, cloudData);
+    new WordCloud(container, filteredData);
 }
 function updateTable() {
     const container = document.getElementById('table-container');
     if (!container) return;
     container.innerHTML = '';
-    const tableData = currentCharacter ? filteredData : data;
-    new Table(container, tableData);
+    new Table(container, filteredData);
 }
 function updatePie() {
     const container = document.getElementById('pie-container');
@@ -237,4 +240,3 @@ function hidePopup() {
 
 continueBtn.addEventListener("click", hidePopup);
 reopenPopupBtn.addEventListener("click", showPopup);
-
