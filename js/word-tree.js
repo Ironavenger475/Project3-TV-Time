@@ -24,6 +24,7 @@ class WordTree {
         const convertToHierarchy = (node) => {
             return {
                 word: node.word,
+                depth: node.depth,
                 weight: node.weight,
                 speakers: node.speakers,
                 children: Array.from(node.children.values()).map(convertToHierarchy)
@@ -34,23 +35,43 @@ class WordTree {
         return convertedData;
     }
 
-    render() {
-        // Create a d3 tree layout
+    render() {// Create a d3 tree layout
+        // Calculate max text width per depth level
+        const calculateMaxWidthPerDepth = (node, depth = 0, maxWidths = {}) => {
+            const nodeWidth = this.measureTextWidth(node.word);
+            maxWidths[depth] = Math.max(maxWidths[depth] || 0, nodeWidth);
+            
+            if (node.children) {
+                node.children.forEach(child => 
+                    calculateMaxWidthPerDepth(child, depth + 1, maxWidths));
+            }
+            return maxWidths;
+        };
+    
+        const maxWidths = calculateMaxWidthPerDepth(this.data);
+        const maxTotalWidth = Object.values(maxWidths).reduce((a, b) => a + b, 0);
+    
+        // Create tree layout with adjusted spacing
         const treeLayout = d3.tree()
-            .size([800, 800]) // Increased size to prevent cutting off the sides
-            .nodeSize([50, 50]);
-
+            .size([ 800 + maxTotalWidth, 800])
+            .nodeSize([28, 5]);
+    
         const root = d3.hierarchy(this.data, d => d.children);
-
-        // Apply the tree layout to the hierarchy
         const treeData = treeLayout(root);
 
         // Calculate the bounding box of the tree
         const nodes = treeData.descendants();
+        nodes.forEach(function(d) {
+            // Control vertical spacing between parent and children
+            if (d.depth > 0) {
+                const verticalSpacing = maxWidths[d.depth - 1];
+                d.y += verticalSpacing;
+            }
+        });
         const xExtent = d3.extent(nodes, d => d.x);
         const yExtent = d3.extent(nodes, d => d.y);
 
-        const width = yExtent[1] - yExtent[0] + 200; // Add padding
+        const width = maxTotalWidth + 200; // Add padding
         const height = xExtent[1] - xExtent[0] + 200; // Add padding
 
         // Create a color legend for speakers
@@ -63,7 +84,7 @@ class WordTree {
             .attr("height", height)
             .style("overflow", "visible")
             .style("position", "absolute")
-            .style("left", "0")
+            .style("left", maxWidths[0] - 10 + "px")
             .append("g")
             .attr("transform", `translate(${Math.abs(yExtent[0]) + 50},${Math.abs(xExtent[0]) + 100})`); // Center the tree
 
@@ -76,7 +97,7 @@ class WordTree {
             .attr("d", d3.linkHorizontal()
                 .x(d => d.y)
                 .y(d => d.x))
-            .style("stroke", "black") // Set line color
+            .style("stroke", "dimgrey") // Set line color
             .style("opacity", ".2") // Set line color
             .style("stroke-width", "2px"); // Set line thickness
 
@@ -139,7 +160,7 @@ class WordTree {
                 .attr("x", 0) // Center the label
                 .style("font-weight", "bold")
                 .style("text-anchor", "middle") // Ensure text is centered
-                .style("text-shadow", "1px 1px 2px white, -1px -1px 2px white"); // Add white dropshadow
+                .style("text-shadow", "0 0 5px 2px white"); // Add white dropshadow
 
             // Add labels for the pie chart
             const pieData = Object.entries(d.data.speakers);
@@ -199,7 +220,8 @@ class WordTree {
                 .attr("x", d => d.children ? -10 : 10)
                 .style("text-anchor", "start") // Reset to default alignment
                 .style("font-weight", "normal")
-                .style("text-shadow", "none"); // Remove dropshadow
+                .style("text-shadow", "none") // Remove dropshadow
+                .attr("transform", "unset")
 
             // Remove pie chart labels
             nodeGroup.selectAll(".pie-label").remove();
@@ -238,9 +260,23 @@ class WordTree {
         });
 
         //scroll to center
-
         this.scrollToNode();
     }
+
+    // add a dummy svg with the text ele to the dom to calculate
+    // width
+    measureTextWidth(text) {
+        const svg = d3.create("svg")
+        document.body.appendChild(svg.node());
+
+        const ele = svg.append("text")
+            .text(text);
+        const length = ele.node().getComputedTextLength();
+
+        document.body.removeChild(svg.node());
+        return length + 25; //add padding
+    }
+    
     
     scrollToNode() {
         const container = this.container;

@@ -1,6 +1,7 @@
 class TrieNode {
-    constructor(word, speaker = null) {
+    constructor(word, depth=0, speaker = null) {
         this.word = word;
+        this.depth = depth;
         this.weight = 0;
         this.children = new Map();
         this.speakers = {}; // Use an object to track speaker weights
@@ -109,13 +110,15 @@ class SentenceTrie {
         let node = this.root;
         const words = sentence.split(" ");
 
+        let depth = 0;
         for (const word of words) {
             if (!node.children.has(word)) {
-                node.children.set(word, new TrieNode(word));
+                node.children.set(word, new TrieNode(word, depth));
             }
             node = node.children.get(word);
             node.weight++;
             node.addSpeaker(speaker); // Use addSpeaker to track speaker weights
+            depth++;
         }
         node.isEndOfSentence = true;
     }
