@@ -1,6 +1,7 @@
 class TrieNode {
-    constructor(word, speaker = null) {
+    constructor(word, depth=0, speaker = null) {
         this.word = word;
+        this.depth = depth;
         this.weight = 0;
         this.children = new Map();
         this.speakers = {}; // Use an object to track speaker weights
@@ -57,6 +58,38 @@ class SentenceTrie {
         });
     }
 
+    concatSentenceChains(){
+        // if a node has <1 child, concat all it's younger kin 
+        // if they are the same weight
+        const processChildren = (node) => {
+            if(node.children.size <= 1){
+                // weight 1 means only 1 child for each node
+                const childrenToConcat = [node.word];
+                let child = node.children.entries().next().value;
+                while(child){
+                    // make sure added child is same weight as parent
+                    if(node.weight == child[1].weight){
+                        childrenToConcat.push(child[1].word)
+                        node.children.delete(child[0]); // remove child
+                    }
+                    child = child[1].children.entries().next()?.value;
+                }
+
+                // concatttt
+                node.word = childrenToConcat.join(" ");
+            }
+
+            // Recursively process remaining children
+            for (const child of node.children.values()) {
+                processChildren(child);
+            }
+        };
+
+        for (const child of this.root.children.values()) {
+            processChildren(child);
+        }
+    }
+
     removeLowWeightChildren() {
         const childrenToRemove = [];
         
@@ -71,47 +104,21 @@ class SentenceTrie {
         for (const key of childrenToRemove) {
             this.root.children.delete(key);
         }
-
-        // if a node has a weight <1, concat all it's weight <1 children's ancestry
-        const processChildren = (node) => {
-            if(node.weight <= 1){
-                // First pass: identify nodes to remove
-                const childrenToConcat = [];
-                for (const [key, child] of node.children) {
-                    if (child.weight <= 1) {
-                        childrenToConcat.push(key);
-                    }
-                }
-            
-
-                // Second pass: concat ancestry
-                for (const key of childrenToConcat) {
-                    node.children.delete(key);
-                }
-            }
-            // Recursively process remaining children
-            for (const child of node.children.values()) {
-                processChildren(child);
-            }
-        };
-
-        // skip the already cleaned direct descendants of root
-        for (const child of this.root.children.values()) {
-            processChildren(child);
-        }
     }
 
     insert(sentence, speaker) {
         let node = this.root;
         const words = sentence.split(" ");
 
+        let depth = 0;
         for (const word of words) {
             if (!node.children.has(word)) {
-                node.children.set(word, new TrieNode(word));
+                node.children.set(word, new TrieNode(word, depth));
             }
             node = node.children.get(word);
             node.weight++;
             node.addSpeaker(speaker); // Use addSpeaker to track speaker weights
+            depth++;
         }
         node.isEndOfSentence = true;
     }
