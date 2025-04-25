@@ -49,6 +49,7 @@ class Table {
     init() {
         const heading = document.createElement('h3');
         heading.textContent = 'Common Phrases in Demon Slayer';
+        heading.style.color = 'black';
         this.container.appendChild(heading);
 
         const tableContainer = document.createElement('div');
