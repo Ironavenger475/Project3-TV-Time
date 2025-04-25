@@ -95,6 +95,11 @@ export class Timeline {
           .style('left', `${event.pageX + 10}px`)
           .style('top', `${event.pageY - 20}px`);
       })
+      .on('mousehover', (event) => {
+        tooltip
+          .style('left', `${event.pageX + 10}px`)
+          .style('top', `${event.pageY - 20}px`);
+      })
       .on('mouseleave', (event) => {
         tooltip.style('opacity', 0);
 
@@ -141,13 +146,6 @@ export class Timeline {
     }
   }
 
-  // endSelection() {
-  //   if (!this.dragging) return;
-  //   this.dragging = false;
-  //   const [start, end] = [this.startIndex, this.endIndex].sort((a, b) => a - b);
-  //   this.selectedRange = this.episodeData.slice(start, end+1 );
-  //   this.logSelectedRange();
-  // }
 
   endSelection() {
     if (!this.dragging) return;
@@ -167,15 +165,39 @@ export class Timeline {
 
   updateSelection() {
     const [start, end] = [this.startIndex, this.endIndex].sort((a, b) => a - b);
-    const container = document.getElementById(this.containerId);
-    const boxes = d3.select(container).selectAll('rect');
+  const container = document.getElementById(this.containerId);
 
-    boxes.transition()
-      .duration(200)
-      .attr('fill', (d, i) => (i >= start && i <= end) ? '#88f' : '#ccc')
-      .transition()
-      .duration(200)
-      .attr('fill', (d, i) => (i >= start && i <= end) ? '#66c' : '#ccc');
+  const svg = d3.select(container).select('svg');
+  const g = svg.select('g');
+
+  g.selectAll('rect')
+    .data(this.episodeData, d => d.id)
+    .join(
+      enter => enter,
+      update =>
+        update
+          .transition()
+          .duration(100)
+          .attr('fill', d => (d.id >= start && d.id <= end ? '#88f' : '#ccc'))
+          ,
+      exit => exit
+    ).on('mousehover', (event) => {
+      tooltip
+        .style('left', `${event.pageX + 10}px`)
+        .style('top', `${event.pageY - 20}px`);
+    }); 
+    const tooltip = d3.select("#tooltip");
+    const hoverEpisode = this.episodeData[end];  // Track the current episode being hovered
+    const rects = d3.select(container).selectAll('rect').nodes();
+    const targetRect = rects[hoverEpisode.id];
+    const rectBox = targetRect.getBoundingClientRect();
+  
+    tooltip
+      .style("opacity", 1)
+      .style("left", `${rectBox.left + window.scrollX + rectBox.width / 2}px`)
+      .style("top", `${rectBox.top + window.scrollY - 30}px`)
+      .text(hoverEpisode.label);
+  
   }
 
   logSelectedRange() {

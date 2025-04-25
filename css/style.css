@@ -1,27 +1,26 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #260707;
-    color:#d6b479;
-    display: flex;
-  }
-  
-  .bottom-right {
-    position: fixed;
-    bottom: 20px;
-    right: 30px;
-    cursor: pointer;
-  }
-  
-  /* main-bg: #260707;
-    accent-red: #DC143C;
-    gold-text: #d6b479;
-    shadow-purple: #3e2a56;
-    demon-purple: #5e17eb; */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #260707;
+  color: #d6b479;
+  display: flex;
+}
+
+.bottom-right {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  cursor: pointer;
+}
+
+/* main-bg: #260707;
+   accent-red: #DC143C;
+   gold-text: #d6b479;
+   shadow-purple: #3e2a56;
+   demon-purple: #5e17eb; */
 
 .left-pane {
-  
   width: 30%;
   background-color: #f0f0f0;
   padding: 20px;
@@ -32,7 +31,6 @@ body {
 }
 
 .right-pane {
- 
   width: 70%;
   background-color: #ffffff;
   padding: 20px;
@@ -40,7 +38,6 @@ body {
   border-top-right-radius: 25px; /* Or unset if you prefer default sharp corners */
   border-bottom-right-radius: 25px;
 }
-
 
 .tab-header {
   display: flex;
@@ -75,7 +72,7 @@ body {
 .main-layout {
   display: flex;
   height: 100vh;
-  width: 100vw; /* <-- Add this */
+  width: 100vw;
   margin: 0;
   border-radius: 25px;
 }
@@ -98,7 +95,106 @@ g{
   user-select: none; /* Standard syntax */
 }
 
-#timeline-labels {
+.phrase-table-container {
+  width: 100%;
+  max-height: 650px; 
+  overflow-y: auto;  /* Vertical scrolling */
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+.phrase-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.phrase-table th,
+.phrase-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.phrase-table th {
+  background-color: #f2f2f2;
+}
+#charname {
+  width: 80%;
+  max-height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.char-button {
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 16px;
+  border: none;
+  background-color: #ececec;
+  text-align: left;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.char-button:hover {
+  background-color: #d0d0d0;
+}
+
+.char-button {
+  width: 100%;
+  min-height: 50px;
+  padding: 10px;
+  border: none;
+  background-color: #ececec;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.char-button:hover {
+  background-color: #d0d0d0;
+}
+
+.char-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.char-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.char-imgs {
+  border-radius: 50%; /* This will make the image a circle */
+  object-fit: cover; /* Ensures the image covers the entire circle without distortion */
+}
+  #timeline-labels {
   position: fixed;
   bottom: 80px;
   width: 100%;

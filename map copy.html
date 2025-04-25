@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Demon Slayer Map</title>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <style>
+    body { background: #f0f0f0; font-family: sans-serif; }
+    svg { border: 1px solid #ccc; display: block; margin: auto; }
+
+    .point-circle {
+      fill: red;
+      stroke: white;
+      stroke-width: 1px;
+    }
+
+    .point-label {
+      font-size: 12px;
+      fill: black;
+      pointer-events: none;
+    }
+
+    .tooltip {
+      position: absolute;
+      background: white;
+      border: 1px solid #aaa;
+      padding: 6px 10px;
+      border-radius: 4px;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+      font-size: 13px;
+      pointer-events: none;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div id="tooltip" class="tooltip"></div>
+<svg id="map" width="736" height="531"></svg>
+
+<script>
+  const svg = d3.select("#map");
+  const tooltip = d3.select("#tooltip");
+
+  // Add the background image
+  svg.append("image")
+    .attr("xlink:href", "Demon Slayer Fan Art3 copy.jpg")  // Adjust the path as needed
+    .attr("width", 736)
+    .attr("height", 531);
+
+  // Predefined positions (within green map area; manually spaced)
+  const points = [
+  { id: "p1", name: "Mount Kumotori", x: 30, y: 100 },
+  { id: "p2", name: "Mount Sagiri", x: 240, y: 125 },
+  { id: "p3", name: "Mount Fujikasane", x: 270, y: 240 },
+  { id: "p4", name: "Asakusa", x: 415, y: 305 },
+  { id: "p5", name: "Tsuzumi Mansion", x: 150, y: 160 },
+  { id: "p6", name: "Mount Natagumo", x: 330, y: 220 },
+  { id: "U", name: "Ubuyashiki Mansion", x: 410, y: 250 },
+  { id: "B", name: "Butterfly Mansion", x: 480, y: 180 },
+  { id: "p7", name: "Mugen Train (Wreckage)", x: 390, y: 195 },
+  { id: "p8", name: "Yoshiwara District", x: 560, y: 230 },
+  { id: "p9", name: "Swordsmith Village", x: 610, y: 300 },
+  { id: "p10", name: "Hashira Training", x: 460, y: 232 },
+  { id: "I", name: "Infinity Castle", x: 600, y: 470 }
+  ];
+
+  // Draw circles
+  svg.selectAll("circle")
+    .data(points)
+    .enter()
+    .append("circle")
+    .attr("class", "point-circle")
+    .attr("cx", d => d.x)
+    .attr("cy", d => d.y)
+    .attr("r", 6)
+    .on("mouseover", function(event, d) {
+      tooltip.style("display", "block")
+             .html(`<strong>${d.name}</strong>`)
+             .style("left", (event.pageX + 10) + "px")
+             .style("top", (event.pageY - 20) + "px");
+    })
+    .on("mouseout", () => tooltip.style("display", "none"));
+
+  // Draw labels (like "A", "p1")
+  svg.selectAll("text")
+    .data(points)
+    .enter()
+    .append("text")
+    .attr("class", "point-label")
+    .attr("x", d => d.x + 8)
+    .attr("y", d => d.y - 8)
+    .text(d => d.id);
+</script>
+
+</body>
+</html>
