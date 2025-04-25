@@ -37,7 +37,7 @@ class PieChart {
         // Title
         const title = document.createElement('h3');
         title.textContent = 'Time Spent in Thought vs Spoken';
-        title.style.color = 'black';
+        title.style.color = '#d6b479';
         title.style.marginBottom = '10px';
         this.container.appendChild(title);
 
