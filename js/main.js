@@ -103,6 +103,10 @@ function applyFilters() {
     updateWordCloud();
     updateTable();
     updatePie();
+
+    if (charMapInstance) {
+        charMapInstance.moveCharacters(selectedCharArr);
+    }
 }
 
 function renderTabContent(tabName) {
