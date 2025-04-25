@@ -13,6 +13,13 @@ class WordTree {
     processData(data) {
         // Filter and process data as needed
         let processedData = new SentenceTrie(this.word, data);
+
+        // remove all weight 1 children of root if there's a lot of branches
+        if(processedData.root.children > 10){
+            processedData.removeLowWeightChildren();
+        }
+        processedData.concatSentenceChains();
+
         // Convert the SentenceTrie structure into a hierarchy compatible with d3
         const convertToHierarchy = (node) => {
             return {
@@ -22,12 +29,8 @@ class WordTree {
                 children: Array.from(node.children.values()).map(convertToHierarchy)
             };
         };
-
-        // remove all weight 1 children of root
-        processedData.removeLowWeightChildren();
-
         const convertedData = convertToHierarchy(processedData.root)
-        console.log(convertedData);
+        //console.log(convertedData);
         return convertedData;
     }
 

@@ -15,10 +15,7 @@ let charMapInstance = null;
 let characterStats = null;
 
 window.onload = () => {
-    showLoading("Loading Demon Slayer transcript...");
     showPopup();
-
-    
     loadData('./data/demon-slayer-transcript.csv')
         .then(csvData => {
             data = csvData.map(d => ({ ...d, character: d.speaker?.trim() }));

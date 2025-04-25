@@ -57,6 +57,38 @@ class SentenceTrie {
         });
     }
 
+    concatSentenceChains(){
+        // if a node has <1 child, concat all it's younger kin 
+        // if they are the same weight
+        const processChildren = (node) => {
+            if(node.children.size <= 1){
+                // weight 1 means only 1 child for each node
+                const childrenToConcat = [node.word];
+                let child = node.children.entries().next().value;
+                while(child){
+                    // make sure added child is same weight as parent
+                    if(node.weight == child[1].weight){
+                        childrenToConcat.push(child[1].word)
+                        node.children.delete(child[0]); // remove child
+                    }
+                    child = child[1].children.entries().next()?.value;
+                }
+
+                // concatttt
+                node.word = childrenToConcat.join(" ");
+            }
+
+            // Recursively process remaining children
+            for (const child of node.children.values()) {
+                processChildren(child);
+            }
+        };
+
+        for (const child of this.root.children.values()) {
+            processChildren(child);
+        }
+    }
+
     removeLowWeightChildren() {
         const childrenToRemove = [];
         
@@ -70,36 +102,6 @@ class SentenceTrie {
         // Second pass: safely remove identified nodes
         for (const key of childrenToRemove) {
             this.root.children.delete(key);
-        }
-
-        // if a node has a weight <1, concat all it's younger kin
-        const processChildren = (node) => {
-            if(node.children.size <= 1){
-                // weight 1 means only 1 child for each node
-                const childrenToConcat = [node.word];
-                let child = node.children.entries().next().value;
-                while(child){
-                    childrenToConcat.push(child[1].word)
-                    child = child[1].children.entries().next()?.value;
-                }
-
-                // remove all (1) children
-                node.children.clear();
-
-                // concatttt
-                node.word = childrenToConcat.join(" ")
-            }
-            else{
-                // Recursively process remaining children
-                for (const child of node.children.values()) {
-                    processChildren(child);
-                }
-            }
-        };
-
-        // skip the already cleaned direct descendants of root
-        for (const child of this.root.children.values()) {
-            processChildren(child);
         }
     }
 
