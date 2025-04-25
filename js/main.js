@@ -88,7 +88,7 @@ function renderTabContent(tabName) {
         updateTable()
         
     }
-    if (tabName === "Pie Chart") {
+    if (tabName === "Thoughts") {
         const tabContent = document.getElementById('tab-3');
         tabContent.innerHTML = '';
         const pieContainer = document.createElement('div');

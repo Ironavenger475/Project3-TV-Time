@@ -1,3 +1,4 @@
+import garbageWords from './stop-phrases.js';
 class Table {
     constructor(container, data) {
         this.container = container;
@@ -11,27 +12,33 @@ class Table {
     processData() {
         const phraseCount = {};
         const minWords = 3;
-    
+       
+
         this.data.forEach(row => {
             const text = row.text?.toLowerCase().replace(/[.,!?"]/g, '').trim();
             if (!text) return;
-    
+
             const words = text.split(/\s+/);
             for (let n = minWords; n <= words.length; n++) {
                 for (let i = 0; i <= words.length - n; i++) {
                     const phrase = words.slice(i, i + n).join(' ');
+
+                    // Count the occurrences of each phrase
                     phraseCount[phrase] = (phraseCount[phrase] || 0) + 1;
                 }
             }
         });
-    
-        // Step 1: Convert to array of phrases with count
+
+        // Step 2: Convert to array of phrases with count
         let phrases = Object.entries(phraseCount)
             .filter(([_, count]) => count > 4)
             .map(([phrase, count]) => ({ phrase, count }))
             .sort((a, b) => b.count - a.count || b.phrase.length - a.phrase.length);
-    
-        // Step 2: Remove subphrases that are contained in longer phrases with same count
+
+        // Step 3: Filter out garbage phrases AFTER they have been formed
+        phrases = phrases.filter(phraseObj => !this.isGarbagePhrase(phraseObj.phrase, garbageWords));
+
+        // Step 4: Remove subphrases that are contained in longer phrases with the same count
         const filtered = [];
         for (let i = 0; i < phrases.length; i++) {
             const { phrase, count } = phrases[i];
@@ -42,8 +49,17 @@ class Table {
                 filtered.push(phrases[i]);
             }
         }
-    
+
         this.tableData = filtered;
+    }
+
+    // Helper function to check if a phrase is considered "garbage"
+    isGarbagePhrase(phrase, garbageWords) {
+        // Normalize the phrase for comparison
+        const normalizedPhrase = phrase.toLowerCase().trim();
+        
+        // Check if the exact phrase matches any garbage phrases
+        return garbageWords.some(garbagePhrase => normalizedPhrase === garbagePhrase);
     }
 
     init() {
