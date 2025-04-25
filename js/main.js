@@ -118,7 +118,7 @@ function renderTabContent(tabName) {
         
     }
     if (tabName === "More Info") {
-        const tabContent = document.getElementById('tab-2');
+        const tabContent = document.getElementById('tab-3');
         tabContent.innerHTML = '';
         const pieContainer = document.createElement('div');
         pieContainer.id = 'pie-container';
@@ -128,7 +128,7 @@ function renderTabContent(tabName) {
     }
 
     if (tabName === "Map") {
-        const mapContent = document.getElementById('tab-3');
+        const mapContent = document.getElementById('tab-2');
         mapContent.innerHTML = '';
     
         const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
