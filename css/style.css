@@ -306,3 +306,8 @@ g{
 body {
   overflow: hidden; /* Disables scrolling on the entire page */
 }
+
+table{
+  color: #d6b479;
+  border-color: #d6b479;
+}

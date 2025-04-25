@@ -22,7 +22,7 @@ window.onload = () => {
     loadData('./data/demon-slayer-transcript.csv')
         .then(csvData => {
             data = csvData.map(d => ({ ...d, character: d.speaker?.trim() }));
-            const timeline = new Timeline("timeline", 64, 16);
+            const timeline = new Timeline("timeline", 64, 16, onEpisodeRangeSelect);
             createTabs(tabs, renderTabContent);
 
             const characterCountMap = {};
