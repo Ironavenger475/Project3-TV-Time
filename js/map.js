@@ -21,19 +21,19 @@ class CharMap {
 
     this.points = [
       { id: "p1", name: "Mount Kumotori", x: 30, y: 100, fp: "Episode 1" },
-      { id: "p2", name: "Mount Sagiri", x: 240, y: 125, fp: "Episode" },
-      { id: "p3", name: "Mount Fujikasane", x: 270, y: 240, fp: "Episode" },
-      { id: "p4", name: "Northwest Town", x: 280, y: 135, fp: "Episode" },
-      { id: "p5", name: "Asakusa", x: 415, y: 305, fp: "Episode" },
-      { id: "p6", name: "Tsuzumi Mansion", x: 150, y: 160, fp: "Episode" },
-      { id: "p7", name: "Mount Natagumo", x: 330, y: 220, fp: "Episode" },
-      { id: "U", name: "Ubuyashiki Mansion", x: 410, y: 250, fp: "Episode" },
-      { id: "B", name: "Butterfly Mansion", x: 480, y: 180, fp: "Episode" },
-      { id: "p8", name: "Mugen Train (Wreckage)", x: 390, y: 195, fp: "Episode" },
-      { id: "p9", name: "Yoshiwara District", x: 560, y: 230, fp: "Episode" },
-      { id: "p10", name: "Swordsmith Village", x: 610, y: 300, fp: "Episode" },
-      { id: "p11", name: "Hashira Training", x: 460, y: 232, fp: "Episode" },
-      { id: "I", name: "Infinity Castle", x: 600, y: 470, fp: "Episode" }
+      { id: "p2", name: "Mount Sagiri", x: 240, y: 125, fp: "Episode 2" },
+      { id: "p3", name: "Mount Fujikasane", x: 270, y: 240, fp: "Episode 4" },
+      { id: "p4", name: "Northwest Town", x: 280, y: 135, fp: "Episode 6" },
+      { id: "p5", name: "Asakusa", x: 415, y: 305, fp: "Episode 7" },
+      { id: "p6", name: "Tsuzumi Mansion", x: 150, y: 160, fp: "Episode 11" },
+      { id: "p7", name: "Mount Natagumo", x: 330, y: 220, fp: "Episode 15" },
+      { id: "U", name: "Ubuyashiki Mansion", x: 410, y: 250, fp: "Episode 22" },
+      { id: "B", name: "Butterfly Mansion", x: 480, y: 180, fp: "Episode 23" },
+      { id: "p8", name: "Mugen Train (Wreckage)", x: 390, y: 195, fp: "Episode 26" },
+      { id: "p9", name: "Yoshiwara District", x: 560, y: 230, fp: "Episode 35" },
+      { id: "p10", name: "Swordsmith Village", x: 610, y: 300, fp: "Episode 45" },
+      { id: "p11", name: "Hashira Training", x: 460, y: 232, fp: "Episode 57" },
+      { id: "I", name: "Infinity Castle", x: 600, y: 470, fp: "Episode 26" }
     ];
 
     this.labelGroup = this.svg.append("g").attr("id", "label-group");
