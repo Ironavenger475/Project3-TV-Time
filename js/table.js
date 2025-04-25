@@ -65,7 +65,7 @@ class Table {
     init() {
         const heading = document.createElement('h3');
         heading.textContent = 'Common Phrases in Demon Slayer';
-        heading.style.color = 'black';
+        heading.style.color = '#d6b479';
         this.container.appendChild(heading);
 
         const tableContainer = document.createElement('div');
@@ -74,6 +74,9 @@ class Table {
 
         this.table = document.createElement('table');
         this.table.classList.add('phrase-table');
+        this.table.style.color = '#d6b479';
+this.table.style.borderColor = '#d6b479'; // If you have borders
+this.table.style.borderCollapse = 'collapse'; 
         tableContainer.appendChild(this.table);
 
         const thead = document.createElement('thead');

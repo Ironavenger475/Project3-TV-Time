@@ -1,6 +1,8 @@
-function initializeFilter(characters, onCharacterSelect) {
+function initializeFilter(characters, onToggleSelect) {
   const charname = document.getElementById("charname");
   const searchBar = document.getElementById("searchBar");
+  searchBar.style.borderRadius='10px';
+  searchBar.style.borderStyle='initial';
   const sectionFilter = document.getElementById("sectionFilter");
   const sortBy = document.getElementById("sortBy");
 
@@ -37,32 +39,57 @@ function initializeFilter(characters, onCharacterSelect) {
         break;
     }
 
-    renderButtons(filtered);
+    renderCheckboxes(filtered);
   }
 
-  function renderButtons(characters) {
+  function checkImageExists(url, callback) {
+    const img = new Image();
+    img.onload = () => callback(true);
+    img.onerror = () => callback(false);
+    img.src = url;
+  }
+
+  function preloadImage(src, callback) {
+    const img = new Image();
+    img.onload = () => callback(src); // valid
+    img.onerror = () => callback('image/default1.png'); // fallback
+    img.src = src;
+  }
+
+ 
+  function renderCheckboxes(characters) {
     charname.innerHTML = "";
     characters.forEach(char => {
-      const button = document.createElement("button");
-      button.className = "char-button";
+      const container = document.createElement("div");
+      container.className = "char-button";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.dataset.character = char.character;
+      checkbox.addEventListener("change", (e) => {
+        onToggleSelect(char.character, e.target.checked);
+      });
 
       const img = document.createElement("img");
-      img.src = `charimages/${char.character}.png`;
+      preloadImage(`charimages/${char.character}.png`, finalSrc => {
+  img.src = finalSrc;
+});
       img.alt = `${char.character} image`;
       img.className = "char-img";
+      img.onerror = function() {
+      this.onerror = null; 
+      this.src = 'image/default1.png'; 
+    };
 
       const span = document.createElement("span");
       span.textContent = char.character;
       span.className = "char-name";
 
-      button.appendChild(img);
-      button.appendChild(span);
-      button.addEventListener("click", () => {
-        onCharacterSelect(char.character);
-        console.log(char.character)
-      });
+      container.appendChild(checkbox);
+      container.appendChild(img);
+      container.appendChild(span);
 
-      charname.appendChild(button);
+      charname.appendChild(container);
     });
   }
 
