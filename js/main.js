@@ -1,3 +1,4 @@
+import { loadData, hideLoading, showLoading, updateLoadingMessage } from './loading.js';
 import WordCloud from './word-cloud.js';
 import { tabs, createTabs } from './tabs.js';
 import Table from './table.js';
@@ -9,36 +10,46 @@ let filteredData = [];
 let currentCharacter = null;
 let charMapInstance = null;
 window.onload = () => {
+    showLoading("Loading Demon Slayer transcript...");
     showPopup();
 
-    d3.csv('./data/demon-slayer-transcript.csv').then(csvData => {
-        data = csvData.map(d => ({ ...d, character: d.speaker?.trim() }));
+    
+    loadData('./data/demon-slayer-transcript.csv')
+        .then(csvData => {
+            data = csvData.map(d => ({ ...d, character: d.speaker?.trim() }));
 
-        createTabs(tabs, renderTabContent);
-        // new columns - unique chars and their count
-        const characterCountMap = {};
-        let uniqueCharacters = [];
+            createTabs(tabs, renderTabContent);
 
-        data.forEach(d => {
-            const character = d.character;
-            if (character) {
-                if (!uniqueCharacters.includes(character)) {
-                    uniqueCharacters.push(character);
+            const characterCountMap = {};
+            let uniqueCharacters = [];
+
+            data.forEach(d => {
+                const character = d.character;
+                if (character) {
+                    if (!uniqueCharacters.includes(character)) {
+                        uniqueCharacters.push(character);
+                    }
+                    characterCountMap[character] = (characterCountMap[character] || 0) + 1;
                 }
-                characterCountMap[character] = (characterCountMap[character] || 0) + 1;
-            }
+            });
+
+            const charData = uniqueCharacters
+                .map(character => ({
+                    character,
+                    count: characterCountMap[character]
+                }))
+                .filter(d => d.count > 20);
+
+            window.characterData = charData;
+            initializeFilter(charData, onCharacterSelect);
+
+            hideLoading();
+        })
+        .catch(error => {
+            console.error(error);
+            updateLoadingMessage("Failed to load data.");
+            setTimeout(() => hideLoading(), 1500);
         });
-
-        const charData = uniqueCharacters
-            .map(character => ({
-                character,
-                count: characterCountMap[character]
-            }))
-            .filter(d => d.count > 20);
-
-        window.characterData = charData;
-        initializeFilter(charData, onCharacterSelect);
-    });
 };
 
 function onCharacterSelect(characterName) {
