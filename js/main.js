@@ -18,8 +18,8 @@ window.onload = () => {
     showPopup();
     loadData('./data/demon-slayer-transcript.csv')
         .then(csvData => {
-            data = csvData.map(d => ({ ...d, character: d.speaker?.trim() }));
-            filteredData = csvData.map(d => ({ ...d, character: d.speaker?.trim() }));
+            data = csvData.map(d => ({ ...d, character: d.speaker?.trim() })).filter((d) => d.speaker.toLowerCase() !== "rengoku");
+            filteredData = data;
             const timeline = new Timeline("timeline", 64, 16, onEpisodeRangeSelect);
             createTabs(tabs, renderTabContent);
 
