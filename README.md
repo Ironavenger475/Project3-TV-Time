@@ -8,4 +8,14 @@ Include design sketches and design justifications
 1 section on what your application enables you to discover: Present some findings you arrive at with your application.  Include screen shots to illustrate.
 1 section on your process- what libraries did you use?  How did you structure your code?  How can you access it and run it?  Link to your code (and the live application, if it is deployed online). 
 
-#Team Contributions
+# Data Visualization - Project 3
+
+## Motivation
+## Data
+## Visualization Components
+## Design Sketches and Justifications
+## Discoveries
+## Process
+## Demo Video
+## Future Improvements
+## Team Contributions
