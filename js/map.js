@@ -35,6 +35,7 @@ class CharMap {
       { id: "p11", name: "Hashira Training", x: 460, y: 232, fp: "Episode" },
       { id: "I", name: "Infinity Castle", x: 600, y: 470, fp: "Episode" }
     ];
+
     this.labelGroup = this.svg.append("g").attr("id", "label-group");
     this.initMap();
     this.drawPoints();
@@ -42,6 +43,7 @@ class CharMap {
     this.drawLabels();
 
     this.csvCache = null; // for caching CSV
+    this.characterData = {}; // Store the current character's elements (image, trails, etc.)
   }
 
   initMap() {
@@ -51,8 +53,7 @@ class CharMap {
       .attr("viewBox", `0 0 ${this.width} ${this.height}`)
       .style("width", "100%")
       .style("height", "100%");
-  
-    }
+  }
 
   drawPoints() {
     this.svg.selectAll("circle")
@@ -93,141 +94,147 @@ class CharMap {
       });
   }
 
-  moveCharacter(characterName) {
-    const nameLower = characterName.charAt(0).toUpperCase() + characterName.slice(1).toLowerCase();
-
-    const processData = (csvData) => {
+  moveCharacters(characterNames) {
+    const self = this;
+    console.log("Character Names:", characterNames);
+    console.log("this.points:", this.points);
+    // Ensure all values are strings
+    characterNames = characterNames.map(name => String(name).trim());
+  
+    // Remove previous characters no longer selected
+    for (const charName in this.characterData) {
+      if (!characterNames.includes(charName)) {
+        const data = this.characterData[charName];
+        self.svg.select(`#character-image-${charName}`).remove();
+        self.svg.select(`#character-circle-${charName}`).remove();
+        self.svg.selectAll(`.trail-segment-${charName}`).remove();
+      }
+    }
+  
+    // Load CSV once
+    const process = (csvData) => {
       const formatted = csvData.map(row => {
-          const newRow = {};
-          for (const key in row) {
-              newRow[key.toLowerCase()] = row[key];
-          }
-          return newRow;
+        const newRow = {};
+        for (const key in row) {
+          newRow[key.toLowerCase()] = row[key];
+        }
+        return newRow;
       });
   
-      const characterData = formatted.find(d => d.speaker === nameLower);
-      if (!characterData) 
-      {
-        console.log("Not Working");
-        console.log(nameLower)
-        return; }
-
-      // Get visited point IDs
-      const visitedPointIds = Object.keys(characterData)
-        .filter(key => key !== "speaker" && characterData[key] === "1");
-
-      const visitedPoints = visitedPointIds
-        .map(id => this.points.find(p => p.id.toLowerCase() === id))
-        .filter(Boolean);
-
-      if (visitedPoints.length === 0) return;
-
-      // Remove previous trail and image
-      this.svg.select("#character-image").remove();
-      this.svg.select("#movement-trail").remove();
-      this.svg.select("#character-circle").remove();
-      this.svg.selectAll(".trail-segment").remove();
-
-const segmentColors = ["#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", "#bcf60c", "#fabebe"];
-
-// Draw individual segments
-for (let i = 0; i < visitedPoints.length - 1; i++) {
-  const start = visitedPoints[i];
-  const end = visitedPoints[i + 1];
-  const color = segmentColors[i % segmentColors.length];
-
-  this.svg.append("line")
-    .attr("class", "trail-segment")
-    .attr("x1", start.x)
-    .attr("y1", start.y)
-    .attr("x2", end.x)
-    .attr("y2", end.y)
-    .attr("stroke", color)
-    .attr("stroke-width", 2)
-    .attr("stroke-dasharray", "4 2");
-}
-this.drawLabels();
-      // Add character image if exists
-      const imgPath = `charimages/${nameLower}.png`;
-const self = this; 
-let characterNode;
-
-// Animate function if image is available
-const animateImage = () => {
-  const clipCircle = this.svg.select("#clip-circle");
-  let i = 1;
-
-  const moveNext = () => {
-    if (i >= visitedPoints.length) return;
-
-    characterNode.transition()
-      .duration(1200)
-      .attr("x", visitedPoints[i].x - 25)
-      .attr("y", visitedPoints[i].y - 25)
-      .on("end", () => {
-        i++;
-        moveNext();
-      });
-  };
-
-  moveNext();
-  this.labelGroup.raise();
-};
-this.labelGroup.raise();
-
-const img = this.svg.append("image")
-  .attr("id", "character-image")
-  .attr("class", "char-imgs")
-  .attr("xlink:href", imgPath)
-  .attr("x", visitedPoints[0].x - 25)
-  .attr("y", visitedPoints[0].y - 25)
-  .attr("width", 50)
-  .attr("height", 50)
-  .on("error", function () {
-    console.warn("Image not found, using fallback circle");
-
-    d3.select(this).remove();
-
-    // Add fallback circle instead of image
-    characterNode = self.svg.append("circle")
-      .attr("id", "character-circle")
-      .attr("cx", visitedPoints[0].x)
-      .attr("cy", visitedPoints[0].y)
-      .attr("r", 10)
-      .attr("fill", "blue")
-      .attr("opacity", 0.5);
-
-    // Animate fallback circle
-    let i = 1;
-    const moveNext = () => {
-      if (i >= visitedPoints.length) return;
-      characterNode.transition()
-        .duration(2000)
-        .attr("cx", visitedPoints[i].x)
-        .attr("cy", visitedPoints[i].y)
-        .on("end", () => {
-          i++;
+      characterNames.forEach(characterName => {
+        const nameLower = characterName.charAt(0).toUpperCase() + characterName.slice(1).toLowerCase();
+  
+        const characterData = formatted.find(d => d.speaker === nameLower);
+        if (!characterData) {
+          console.log(`Character not found in CSV: ${nameLower}`);
+          return;
+        }
+  
+        const visitedPointIds = Object.keys(characterData)
+          .filter(key => key !== "speaker" && characterData[key] === "1");
+  
+        const visitedPoints = visitedPointIds
+          .map(id => this.points.find(p => p.id.toLowerCase() === id))
+          .filter(Boolean);
+  
+        if (visitedPoints.length === 0) return;
+  
+        // Clean up before redraw
+        self.svg.select(`#character-image-${nameLower}`).remove();
+        self.svg.select(`#movement-trail-${nameLower}`).remove();
+        self.svg.select(`#character-circle-${nameLower}`).remove();
+        self.svg.selectAll(`.trail-segment-${nameLower}`).remove();
+  
+        const segmentColors = ["#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4"];
+  
+        for (let i = 0; i < visitedPoints.length - 1; i++) {
+          const start = visitedPoints[i];
+          const end = visitedPoints[i + 1];
+          const color = segmentColors[i % segmentColors.length];
+  
+          self.svg.append("line")
+            .attr("class", `trail-segment-${nameLower}`)
+            .attr("x1", start.x)
+            .attr("y1", start.y)
+            .attr("x2", end.x)
+            .attr("y2", end.y)
+            .attr("stroke", color)
+            .attr("stroke-width", 2)
+            .attr("stroke-dasharray", "4 2");
+        }
+  
+        self.drawLabels();
+  
+        // Try image animation
+        const imgPath = `charimages/${nameLower}.png`;
+        let characterNode;
+  
+        const animateImage = () => {
+          let i = 1;
+          const moveNext = () => {
+            if (i >= visitedPoints.length) return;
+            characterNode.transition()
+              .duration(1200)
+              .attr("x", visitedPoints[i].x - 25)
+              .attr("y", visitedPoints[i].y - 25)
+              .on("end", () => {
+                i++;
+                moveNext();
+              });
+          };
           moveNext();
-        });
+          self.labelGroup.raise();
+        };
+  
+        const img = self.svg.append("image")
+          .attr("id", `character-image-${nameLower}`)
+          .attr("class", "char-imgs")
+          .attr("xlink:href", imgPath)
+          .attr("x", visitedPoints[0].x - 25)
+          .attr("y", visitedPoints[0].y - 25)
+          .attr("width", 50)
+          .attr("height", 50)
+          .on("error", function () {
+            d3.select(this).remove();
+            characterNode = self.svg.append("circle")
+              .attr("id", `character-circle-${nameLower}`)
+              .attr("cx", visitedPoints[0].x)
+              .attr("cy", visitedPoints[0].y)
+              .attr("r", 10)
+              .attr("fill", "blue")
+              .attr("opacity", 0.5);
+  
+            let i = 1;
+            const moveNext = () => {
+              if (i >= visitedPoints.length) return;
+              characterNode.transition()
+                .duration(2000)
+                .attr("cx", visitedPoints[i].x)
+                .attr("cy", visitedPoints[i].y)
+                .on("end", () => {
+                  i++;
+                  moveNext();
+                });
+            };
+            moveNext();
+          })
+          .on("load", function () {
+            characterNode = d3.select(this);
+            animateImage();
+          });
+  
+        self.characterData[nameLower] = { image: img, trail: visitedPoints };
+      });
     };
-    moveNext();
-  })
-  .on("load", function () {
-    characterNode = d3.select(this);
-    animateImage();
-    this.labelGroup.raise();
-  });
-    };
-    if (this.csvCache) {
-      processData(this.csvCache);
+  
+    if (self.csvCache) {
+      process(self.csvCache);
     } else {
-      d3.csv("data/maptravel.csv").then(data => {
-        this.csvCache = data;
-        processData(data);
-        console.log(data);
+      d3.csv('./data/maptravel.csv').then(csv => {
+        self.csvCache = csv;
+        process(csv);
       });
     }
-  }
-}
+  } }
 
 export default CharMap;
