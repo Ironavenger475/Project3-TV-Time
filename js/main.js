@@ -5,11 +5,14 @@ import Table from './table.js';
 import PieChart from './pieChart.js';
 import CharMap from './map.js';
 import { Timeline } from './timeline.js';
+import CharacterStats from './characterStats.js';
+import DialoguePieChart from './dialoguepiechart.js';
 
 let data = [];
 let filteredData = [];
 let currentCharacter = null;
 let charMapInstance = null;
+let characterStats = null;
 window.onload = () => {
     showLoading("Loading Demon Slayer transcript...");
     showPopup();
@@ -51,7 +54,6 @@ window.onload = () => {
             updateLoadingMessage("Failed to load data.");
             setTimeout(() => hideLoading(), 1500);
         });
-
 };
 
 function onEpisodeRangeSelect(selectedEpisodes) {
@@ -103,7 +105,7 @@ function renderTabContent(tabName) {
         wordCloudContainer.style.height = '400px';
         wordCloudContainer.id = 'word-cloud-container';
         tabContent.appendChild(wordCloudContainer);
-
+        new WordCloud(wordCloudContainer, data);
         updateWordCloud();
     }
     if (tabName === "Phrases") {
@@ -115,7 +117,7 @@ function renderTabContent(tabName) {
         updateTable()
         
     }
-    if (tabName === "Pie Chart") {
+    if (tabName === "More Info") {
         const tabContent = document.getElementById('tab-2');
         tabContent.innerHTML = '';
         const pieContainer = document.createElement('div');
@@ -158,9 +160,70 @@ function updatePie() {
     const container = document.getElementById('pie-container');
     if (!container) return;
     container.innerHTML = '';
+
+    // Create a wrapper to hold the pie charts side by side
+    const pieWrapper = document.createElement('div');
+    pieWrapper.style.display = 'flex'; // Use Flexbox to align the charts horizontally
+    pieWrapper.style.justifyContent = 'space-between'; // Optional: Space between the charts
+    pieWrapper.style.width = '100%'; // Ensure the wrapper takes full width
+    container.appendChild(pieWrapper);
+
+    // Create containers for both pie charts
+    const pieChartContainer1 = document.createElement('div');
+    pieChartContainer1.style.width = '45%'; // Each pie chart takes 45% of the width
+    pieWrapper.appendChild(pieChartContainer1);
+
+    const pieChartContainer2 = document.createElement('div');
+    pieChartContainer2.style.width = '55%'; // Same width as the other pie chart
+    pieWrapper.appendChild(pieChartContainer2);
     const pieData = currentCharacter ? filteredData : data;
-    new PieChart(container, pieData);
+    new PieChart(pieChartContainer1, pieData);
+    new DialoguePieChart(pieChartContainer2, pieData);
+    if (currentCharacter) {
+        const characterStats = new CharacterStats(filteredData);  // Use filtered data
+
+        // Get character stats using the selected character
+        const stats = characterStats.getCharacterStats(currentCharacter);
+
+        // Create the stats box container
+        const statsBox = document.createElement('div');
+        statsBox.style.marginTop = '10px';
+        statsBox.style.fontSize = '14px';
+        statsBox.style.lineHeight = '1.6';
+
+        // Title with the character name
+        const charTitle = document.createElement('strong');
+        charTitle.textContent = `Stats for ${currentCharacter}`;
+        statsBox.appendChild(charTitle);
+
+        // Season count
+        const seasonInfo = document.createElement('div');
+        seasonInfo.textContent = `Seasons Appeared: ${stats.totalSeasons}`;
+        statsBox.appendChild(seasonInfo);
+
+        // Episode count
+        const episodeInfo = document.createElement('div');
+        episodeInfo.textContent = `Episodes Appeared: ${stats.totalEpisodes}`;
+        statsBox.appendChild(episodeInfo);
+
+        const dialogueInfo = document.createElement('div');
+        dialogueInfo.textContent = `Total Dialogue: ${stats.totalDialogue} lines`;
+        statsBox.appendChild(dialogueInfo);
+
+        let link = `https://kimetsu-no-yaiba.fandom.com/wiki/Special:Search?query=${currentCharacter}&scope=internal&contentType=&ns%5B0%5D=0&ns%5B1%5D=2900`;        const linkInfo = document.createElement('div');
+        const anchor = document.createElement('a');
+        anchor.href = link; // Set the href to the link
+        anchor.textContent = `More Info on ${currentCharacter}`; // Text to display for the link
+        anchor.target = "_blank"; // Optional: Open in a new tab
+        linkInfo.appendChild(anchor);
+
+        // Add the linkInfo div to the statsBox
+        statsBox.appendChild(linkInfo);
+        // Append the stats box to the container
+        container.appendChild(statsBox);
+    }
 }
+
 const overlay = document.getElementById("overlay");
 const continueBtn = document.getElementById("continueBtn");
 const reopenPopupBtn = document.getElementById("reopenPopupBtn");

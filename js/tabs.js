@@ -1,4 +1,4 @@
-export const tabs = ["Word Cloud", "Timeline", "Phrases","Thoughts","Map"];
+export const tabs = ["Word Cloud", "Phrases","More Info","Map"];
 
 export function renderPlaceholder(tabName) {
   console.log(`Not implemented: ${tabName}`);

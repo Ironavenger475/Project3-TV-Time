@@ -302,3 +302,7 @@ g{
 .sortBy{
   width:33%;
 }
+
+body {
+  overflow: hidden; /* Disables scrolling on the entire page */
+}
