@@ -22,6 +22,7 @@ window.onload = () => {
     loadData('./data/demon-slayer-transcript.csv')
         .then(csvData => {
             data = csvData.map(d => ({ ...d, character: d.speaker?.trim() }));
+            filteredData = csvData.map(d => ({ ...d, character: d.speaker?.trim() }));
             const timeline = new Timeline("timeline", 64, 16, onEpisodeRangeSelect);
             createTabs(tabs, renderTabContent);
 
@@ -37,7 +38,7 @@ window.onload = () => {
                     characterCountMap[character] = (characterCountMap[character] || 0) + 1;
                 }
             });
-
+            
             const charData = uniqueCharacters
                 .map(character => ({
                     character,
@@ -55,6 +56,7 @@ window.onload = () => {
             updateLoadingMessage("Failed to load data.");
             setTimeout(() => hideLoading(), 1500);
         });
+
 };
 
 
