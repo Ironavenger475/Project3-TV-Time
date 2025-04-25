@@ -14,7 +14,7 @@ window.onload = () => {
 
     d3.csv('./data/demon-slayer-transcript.csv').then(csvData => {
         data = csvData.map(d => ({ ...d, character: d.speaker?.trim() }));
-        const timeline = new Timeline("timeline", 64, 16);
+        const timeline = new Timeline("timeline", 64, 16, onEpisodeRangeSelect);
         console.log(data)
         createTabs(tabs, renderTabContent);
         // new columns - unique chars and their count
@@ -43,10 +43,35 @@ window.onload = () => {
     });
 };
 
+function onEpisodeRangeSelect(selectedEpisodes) {
+    window.selectedEpisodeSet = new Set(selectedEpisodes.map(ep => `S${ep.season}E${ep.episode}`));
+
+    const base = data.filter(d => window.selectedEpisodeSet.has(`S${+d.season}E${+d.episode}`));
+
+    if (selectedEpisodes.length === 0) {
+        window.selectedEpisodeSet = null;
+        filteredData = currentCharacter ? data.filter(d => d.character === currentCharacter) : data;
+    } else {
+        window.selectedEpisodeSet = new Set(selectedEpisodes.map(ep => `S${ep.season}E${ep.episode}`));
+        const base = data.filter(d => window.selectedEpisodeSet.has(`S${+d.season}E${+d.episode}`));
+        filteredData = currentCharacter ? base.filter(d => d.character === currentCharacter) : base;
+    }
+
+    updateWordCloud();
+    updateTable();
+    updatePie();
+}
+
 function onCharacterSelect(characterName) {
     currentCharacter = characterName;
     const lowerName = characterName.toLowerCase();
+
+    const base = window.selectedEpisodeSet 
+        ? data.filter(d => window.selectedEpisodeSet.has(`S${+d.season}E${+d.episode}`)) 
+        : data;
+
     filteredData = data.filter(d => d.speaker === characterName);
+
     updateWordCloud(); 
     updateTable();
     updatePie();
@@ -71,7 +96,7 @@ function renderTabContent(tabName) {
         updateWordCloud();
     }
     if (tabName === "Phrases") {
-        const tabContent = document.getElementById('tab-2');
+        const tabContent = document.getElementById('tab-1');
         tabContent.innerHTML = '';
         const tableContainer = document.createElement('div');
         tableContainer.id = 'table-container';
@@ -80,7 +105,7 @@ function renderTabContent(tabName) {
         
     }
     if (tabName === "Pie Chart") {
-        const tabContent = document.getElementById('tab-3');
+        const tabContent = document.getElementById('tab-2');
         tabContent.innerHTML = '';
         const pieContainer = document.createElement('div');
         pieContainer.id = 'pie-container';
@@ -90,7 +115,7 @@ function renderTabContent(tabName) {
     }
 
     if (tabName === "Map") {
-        const mapContent = document.getElementById('tab-4');
+        const mapContent = document.getElementById('tab-3');
         mapContent.innerHTML = '';
     
         const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
