@@ -56,7 +56,6 @@ function initializeFilter(characters, onToggleSelect) {
     img.src = src;
   }
 
- 
   function renderCheckboxes(characters) {
     charname.innerHTML = "";
     characters.forEach(char => {
@@ -71,7 +70,7 @@ function initializeFilter(characters, onToggleSelect) {
       });
 
       const img = document.createElement("img");
-      preloadImage(`charimages/${char.character}.png`, finalSrc => {
+      preloadImage(`./image/pfp/${char.character.toLowerCase()}.png`, finalSrc => {
   img.src = finalSrc;
 });
       img.alt = `${char.character} image`;
