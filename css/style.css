@@ -9,9 +9,10 @@ body {
 
 .bottom-right {
   position: fixed;
-  bottom: 20px;
-  right: 30px;
+  bottom: 65px;
+  right: 20px;
   cursor: pointer;
+  z-index: 1000;
 }
 
 /* main-bg: #260707;
