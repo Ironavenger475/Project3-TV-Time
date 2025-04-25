@@ -13,7 +13,7 @@ function hideLoading() {
     updateProgressBar(100);
     setTimeout(() => {
         if (loadingContainer) loadingContainer.style.display = "none";
-    }, 100);
+    }, 300);
 }
 
 function updateLoadingMessage(message) {
@@ -36,49 +36,69 @@ let activePromise = null;
 function createWorker() {
     const workerCode = `
         importScripts('https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js');
+        
         self.onmessage = async (event) => {
             const { type, url } = event.data;
             
             if (type === 'load') {
                 try {
-                    const response = await fetch(url);
-                    
-                    if (!response.ok) {
-                        throw new Error(\`HTTP error: \${response.status}\`);
-                    }
-
-                    const reader = response.body.getReader();
-                    let receivedLength = 0;
-                    let totalLength = parseInt(response.headers.get('content-length'), 10) || 0;
-                    
-                    while (true) {
-                        const { done, value } = await reader.read();
+                    // Create Promise wrapper for XHR
+                    const fetchData = new Promise((resolve, reject) => {
+                        const xhr = new XMLHttpRequest();
                         
-                        if (done) {
-                            break;
-                        }
+                        // Add error handling
+                        xhr.onerror = () => {
+                            reject(new Error('Network error while loading CSV'));
+                        };
                         
-                        receivedLength += value.length;
-                        const progress = Math.round((receivedLength / totalLength) * 100);
-                        self.postMessage({ type: 'progress', progress });
+                        // Handle progress updates
+                        xhr.onprogress = (event) => {
+                            if (event.lengthComputable) {
+                                const progress = Math.round((event.loaded / event.total) * 100);
+                                self.postMessage({ 
+                                    type: 'progress', 
+                                    progress 
+                                });
+                            }
+                        };
                         
-                        // Process chunks here if needed
-                    }
+                        // Handle successful load
+                        xhr.onload = () => {
+                            if (xhr.status === 200) {
+                                try {
+                                    const data = d3.csvParse(xhr.responseText);
+                                    resolve(data);
+                                } catch (parseError) {
+                                    reject(new Error("Failed to parse CSV: " + parseError.message));
+                                }
+                            } else {
+                                reject(new Error("Failed to load CSV: Status " + xhr.status));
+                            }
+                        };
+                        
+                        // Make the request
+                        xhr.open('GET', url, true);
+                        xhr.send();
+                    });
                     
-                    const chunks = [];
-                    while (true) {
-                        const { done, value } = await reader.read();
-                        if (done) break;
-                        chunks.push(value);
-                    }
-                    
-                    const text = chunks.join('');
-                    const data = d3.csvParse(text);
-                    self.postMessage({ type: 'rawData', data });
+                    // Handle the promise
+                    fetchData
+                        .then(data => {
+                            self.postMessage({ 
+                                type: 'rawData', 
+                                data 
+                            });
+                        })
+                        .catch(error => {
+                            self.postMessage({
+                                type: 'error',
+                                message: error.message || 'An error occurred while loading the CSV'
+                            });
+                        });
                 } catch (error) {
-                    self.postMessage({ 
-                        type: 'error', 
-                        message: error.message || 'An error occurred while loading the CSV'
+                    self.postMessage({
+                        type: 'error',
+                        message: error.message || 'An error occurred while initializing the request'
                     });
                 }
             }
@@ -101,6 +121,7 @@ function initializeWorker() {
                 case 'rawData':
                     try {
                         hideLoading();
+                        updateLoadingMessage("Drawing Visualizations");
                         activePromise?.resolve(data);
                     } catch (error) {
                         activePromise?.reject(new Error('Error parsing CSV: ' + error.message));
