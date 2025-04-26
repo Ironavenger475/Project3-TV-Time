@@ -166,7 +166,7 @@ class CharMap {
         self.drawLabels();
   
         // Try image animation
-        const imgPath = `charimages/${nameLower}.png`;
+        const imgPath = `image/pfp/${nameLower}.png`;
         let characterNode;
   
         const animateImage = () => {
