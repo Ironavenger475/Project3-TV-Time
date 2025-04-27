@@ -19,3 +19,22 @@ Include design sketches and design justifications
 ## Demo Video
 ## Future Improvements
 ## Team Contributions
+### Iswarya Mikkili
+- thing 1
+- thing 2
+
+### Jasmine Mogadam
+- thing 1
+- thing 2
+
+### Rashi Loni
+- thing 1
+- thing 2
+
+### Samraysh Pellakur
+- thing 1
+- thing 2
+
+### Tulasi Rama Raju Chittiraju
+- thing 1
+- thing 2
