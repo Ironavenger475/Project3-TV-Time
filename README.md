@@ -48,9 +48,8 @@ Initially we wanted to do some analysis on the japanese version of the transcrip
 ## Future Improvements
 ## Team Contributions
 ### Iswarya Mikkili
-- thing 1
-- thing 2
-
+- Timeline 
+  
 ### Jasmine Mogadam
 - General project management
 - [Sketches](#sketches) for some screens
