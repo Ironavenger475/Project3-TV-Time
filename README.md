@@ -49,6 +49,25 @@ by Samraysh
 Initially we wanted to do some analysis on the japanese version of the transcript, but that was found to be out of scope fairly early on. Two of the visualizations in the top right are used in the "More Info" tab in the final visualization.
 ## Discoveries
 ## Process
+### Development
+- Create Miro Cards for each task to fulfill the requirements of the project
+- Assign a Miro Card to team member
+- Create branch for devlopment
+- Work on card to present work at next meeting
+- Present work at meeting, if it passes, merge to main
+- Repeat process until all Miro cards are complete
+
+### Libraries
+- Bootstrap (Bootstrap Icons for UI elements)
+- D3 v6 + v7 (automate visualization creation)
+- D3.layout.cloud (generating a word cloud)
+- Popper.js (Positioning tool for Bootstrap components)
+- Custom CSS (popup.css, style.css)
+
+### How to run
+Use nginx or a vscode extension like live server to run it locally. <br/> <i>Link to code: https://github.com/DataVis-Spring2025/Project3-TV-Time </i>
+You can also access it by visiting the hosted site <br/> <i>Link to site: https://dv-2025-project2.netlify.app/ </i>
+
 ## Demo Video
 ## Future Improvements
 ## Team Contributions
@@ -63,8 +82,10 @@ Initially we wanted to do some analysis on the japanese version of the transcrip
 - Word Trie
 
 ### Rashi Loni
-- thing 1
-- thing 2
+- amount of time spent in thought vs words spoken out loud
+- phrases table
+- tabs and panes
+- data loading
 
 ### Samraysh Pellakur
 - thing 1
