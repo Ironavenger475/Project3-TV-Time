@@ -53,7 +53,7 @@ window.onload = () => {
             updateLoadingMessage("Failed to load data.");
             setTimeout(() => hideLoading(), 1500);
         });
-
+        console.clear();
 };
 
 
