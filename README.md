@@ -66,7 +66,7 @@ Initially we wanted to do some analysis on the japanese version of the transcrip
 
 ### How to run
 Use nginx or a vscode extension like live server to run it locally. <br/> <i>Link to code: https://github.com/DataVis-Spring2025/Project3-TV-Time </i>
-You can also access it by visiting the hosted site <br/> <i>Link to site: https://dv-2025-project2.netlify.app/ </i>
+You can also access it by visiting the hosted site <br/> <i>Link to site: https://demon-slayer-vis.netlify.app/ </i>
 
 ## Demo Video
 ## Future Improvements
