@@ -99,5 +99,5 @@ You can also access it by visiting the hosted site <br/> <i>Link to site: https:
 - thing 2
 
 ### Tulasi Rama Raju Chittiraju
-- thing 1
-- thing 2
+- Character selection
+- Group mode (selecting 3 characters max)
