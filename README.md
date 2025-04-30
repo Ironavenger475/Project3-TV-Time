@@ -70,6 +70,9 @@ You can also access it by visiting the hosted site <br/> <i>Link to site: https:
 
 ## Demo Video
 ## Future Improvements
+Have the map show the journey of the selected characters aligned to the same pace through the season.
+
+
 ## Team Contributions
 ### Iswarya Mikkili
 - Timeline 
