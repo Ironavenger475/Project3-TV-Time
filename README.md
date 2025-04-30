@@ -1,13 +1,3 @@
-#Enter all stuff here
-
-Explain the motivation for your application.  What can it allow someone to understand? 
-1 section on the data: Describe the data and include a link. 
-*** Since you will have done more work for this project to obtain and process the data, describe your methods and include processing scripts. 
-1 section on the visualization components: Explain each view of the data, the GUI, etc.  Explain how you can interact with your application, and how the views update in response to these interactions. 
-Include design sketches and design justifications 
-1 section on what your application enables you to discover: Present some findings you arrive at with your application.  Include screen shots to illustrate.
-1 section on your process- what libraries did you use?  How did you structure your code?  How can you access it and run it?  Link to your code (and the live application, if it is deployed online). 
-
 # Data Visualization - Project 3
 
 ## Motivation
@@ -47,19 +37,20 @@ the <em>Demon Slayer</em> series itself.
 ![image](./image/sketches4.png)
 by Samraysh
 Initially we wanted to do some analysis on the japanese version of the transcript, but that was found to be out of scope fairly early on. Two of the visualizations in the top right are used in the "More Info" tab in the final visualization.
+
 ## Discoveries
-- Tanjiro and Nezuko seem to be the only characters that have visited every location shown in the show. With the exclusion of the initial few towns (Mount Kumotori to Asakusa), the only characters who come close are Zenitsu and Inosuke (They didn't visit swordsmith village).
+- Tanjiro and Nezuko are the only characters who appear in every major location featured throughout the series. Excluding the earliest locations (Mount Kumotori to Asakusa), the closest characters to match their travel footprint are Zenitsu and Inosuke — however, they never visit the Swordsmith Village.
   ![image](./image/Disc1.png)
 - Tanjiro has the most number of lines in the show and his interactions with Inosuke and Zenitsu account for more than a quarter of the dialogue.
   ![image](./image/Disc2.png)
-- Tanjiro is the only character who seems to have had an interaction with almost all other characters
-- Zenitsu and Inosuke seem to interact only when tanjiro is present
+- Tanjiro is the only character who seems to have had an interaction with almost all other charactersZenitsu and Inosuke are rarely shown interacting without Tanjiro present, suggesting that their relationship is mostly mediated through him.
   ![image](./image/Disc3.png)
 - 0.7% of the dialogue (41 lines) is shown to be an outlier in the total data indicating that they are either filtered out characters (characters with less than 20 lines throughout the series)or discrepencies in the dataset
 - 17.5% of the lines are in thought form
   ![image](./image/Disc4.png)
 - Kokushibo and Nakime are the only members of the twelve kizuki that have less than 20 lines in the series. (Hanteganu can be considered an exception since his other five forms count since they are technically him)
 - Majority of the dialogue seems to occur in the latter half of the series (Post Mugen Train arc [2nd half of 2nd season])
+  
 ## Process
 ### Development
 - Create Miro Cards for each task to fulfill the requirements of the project
@@ -91,7 +82,9 @@ You can also access it by visiting the hosted site <br/> <i>Link to site: https:
 
 ## Team Contributions
 ### Iswarya Mikkili
-- Timeline 
+- Timeline
+- QoL Changes
+- Filter
   
 ### Jasmine Mogadam
 - General project management
@@ -107,8 +100,10 @@ You can also access it by visiting the hosted site <br/> <i>Link to site: https:
 - data loading
 
 ### Samraysh Pellakur
-- thing 1
-- thing 2
+- Gathered the data
+- Pop-Up Window
+- Created Map
+- Character Stats
 
 ### Tulasi Rama Raju Chittiraju
 - Character selection
