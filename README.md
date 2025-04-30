@@ -70,10 +70,12 @@ You can also access it by visiting the hosted site <br/> <i>Link to site: https:
 
 ## Demo Video
 ## Future Improvements
-- Have the map show the journey of the selected characters aligned to the same pace through the season.
-- A character tree to illustrate the lineage/relationship between the characters.
-- Add more information specific to each characters (type of attacks and skillsets, sentiment analysis with other characters,...)
+- Have the map show the journey of the selected characters aligned to the same pace throughout the series
+- A character tree to illustrate the lineage/relationship between the characters
+- Add more information specific to each character (type of attacks and skillsets, sentiment analysis with other characters,...)
 - Allow the filtering option to filter characters based on wider variety like demons, slayers, men, women, etc.
+- To reduce the discrepancies present in the extracted dataset
+- To fix the issue with the word cloud such that it would update whenever a character is selected while being present on another tab
 
 ## Team Contributions
 ### Iswarya Mikkili
