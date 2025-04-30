@@ -70,8 +70,8 @@ You can also access it by visiting the hosted site <br/> <i>Link to site: https:
 
 ## Demo Video
 ## Future Improvements
-Have the map show the journey of the selected characters aligned to the same pace through the season.
-
+- Have the map show the journey of the selected characters aligned to the same pace through the season.
+- A character tree to illustrate the lineage/relationship between the characters.
 
 ## Team Contributions
 ### Iswarya Mikkili
