@@ -72,6 +72,8 @@ You can also access it by visiting the hosted site <br/> <i>Link to site: https:
 ## Future Improvements
 - Have the map show the journey of the selected characters aligned to the same pace through the season.
 - A character tree to illustrate the lineage/relationship between the characters.
+- Add more information specific to each characters (type of attacks and skillsets, sentiment analysis with other characters,...)
+- Allow the filtering option to filter characters based on wider variety like demons, slayers, men, women, etc.
 
 ## Team Contributions
 ### Iswarya Mikkili
