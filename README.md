@@ -1,6 +1,7 @@
 # Data Visualization - Project 3
 
 ## Motivation
+Demon Slayer is a widely acclaimed anime series known for its rich characters, emotional depth. This project is to deepen viewer engagement and understanding of the series by transforming the way its story and characters are explored.  Users can interact with the narrative in a more meaningful way, gaining insight into the characters’s next words. The platform allows users to follow the development of individual characters, understand the balance between their inner thoughts and spoken dialogue, and observe how they move through different locations in the story. 
 ## <div id="data">Data</div>
 All our transcript data was from the Tumblr user [transcribed anime scripts](https://transcribedanimescripts.tumblr.com/), posted here: <br>https://transcribedanimescripts.tumblr.com/post/620874161772953600/demon-slayer-kimetsu-no-yaiba-master-list <br>
 They made four transcripts for each episodes, English (sub)  |  English + Romaji  |  English + 日本語  |  日本語. The transcripts themselves are well formatted google docs hosted in their personal google drive.<br>
