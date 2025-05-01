@@ -37,7 +37,7 @@ by Jasmine<br>
 Shows the character selection on the left, visualization tabs on right, and some mockups of individual visualizations.<br>
 <br>
 ![image](./image/sketches3.png)
-Info button in the bottom left could bring up overlay explaining details about the <em>Demon Slayer</em> series itself.
+<br>Info button in the bottom left could bring up overlay explaining details about the <em>Demon Slayer</em> series itself.
 
 ### Unimplemented "Compare Mode"
 ![image](./image/sketches2.png)
