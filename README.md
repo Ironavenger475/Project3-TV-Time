@@ -74,7 +74,7 @@ You can also access it by visiting the hosted site <br/> <i>Link to site: https:
 
 ## Demo Video
 
-[![YouTube](http://i.ytimg.com/vi/6tEtrOu1Ifs/hqdefault.jpg)](https://youtu.be/PQscJ90wpTI)]
+[![YouTube](http://i.ytimg.com/vi/PQscJ90wpTI/hqdefault.jpg)](https://youtu.be/PQscJ90wpTI)
 ## Future Improvements
 - Have the map show the journey of the selected characters aligned to the same pace throughout the series
 - A character tree to illustrate the lineage/relationship between the characters
