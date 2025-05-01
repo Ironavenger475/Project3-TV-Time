@@ -44,7 +44,8 @@ Initially we wanted to do some analysis on the japanese version of the transcrip
   ![image](./image/Disc1.png)
 - Tanjiro has the most number of lines in the show and his interactions with Inosuke and Zenitsu account for more than a quarter of the dialogue.
   ![image](./image/Disc2.png)
-- Tanjiro is the only character who seems to have had an interaction with almost all other charactersZenitsu and Inosuke are rarely shown interacting without Tanjiro present, suggesting that their relationship is mostly mediated through him.
+- Tanjiro is the only character who seems to have had an interaction with almost all other characters
+- Zenitsu and Inosuke are rarely shown interacting without Tanjiro present, suggesting that their relationship is mostly mediated through him.
   ![image](./image/Disc3.png)
 - 0.7% of the dialogue (41 lines) is shown to be an outlier in the total data indicating that they are either filtered out characters (characters with less than 20 lines throughout the series)or discrepencies in the dataset
 - 17.5% of the lines are in thought form
