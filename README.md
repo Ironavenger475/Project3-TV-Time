@@ -73,6 +73,8 @@ Use nginx or a vscode extension like live server to run it locally. <br/> <i>Lin
 You can also access it by visiting the hosted site <br/> <i>Link to site: https://demon-slayer-vis.netlify.app/ </i>
 
 ## Demo Video
+
+[![YouTube](http://i.ytimg.com/vi/6tEtrOu1Ifs/hqdefault.jpg)](https://youtu.be/PQscJ90wpTI)]
 ## Future Improvements
 - Have the map show the journey of the selected characters aligned to the same pace throughout the series
 - A character tree to illustrate the lineage/relationship between the characters
