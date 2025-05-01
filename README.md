@@ -12,19 +12,19 @@ After the data was turned into a .csv, Samraysh went back and made his own [scri
 For the character selection sidebar, Tulasi parsed the incoming csv data into a weighted character array. This array was used to sort by dialouge count and filter out characters that weren't recurring.
 
 ## Visualization Components
-When the user loads the application, they are met with an intro pop up which gives a brief overview of Demon Slayer. It provides the viewer with a summary of the plot, streaming services that it is on, characters, number of seasons and episodes,  and running time. It also provides an description and visual of the main characters, including the primary protagonist and antagonist of the show. 
+When the user loads the application, they are met with an intro pop up which gives a brief overview of Demon Slayer. It provides the viewer with a summary of the plot, streaming services that it is on, characters, number of seasons and episodes,  and running time. It also provides an description and visual of the main characters, including the primary protagonist and antagonist of the show.<br> 
 <img src="./image/vis2.png" alt="image" width="500"/><br><br>
 When the user clicks continue, they will be taken into the main data view. It is split into two panes with the right pane containing the visualizations that are accessed by clicking the tabs and the left side contains a list of characters. The character list shows images of the characters that have spoken across all episodes. The user can search for a specific character, or order the list alphabetically and by how much the character speaks through out the show. The user can select multiple characters at the same time in order to filter the other visualizations to only include data for the selected characters.<br> 
 <img src="./image/vis11.png" alt="image" width="500"/><br><br>
-On the right side of the application, the first tab contains the word cloud which displays the most commonly used words based on the size. Hovering over a word will show the number of times it has been said. 
+On the right side of the application, the first tab contains the word cloud which displays the most commonly used words based on the size. Hovering over a word will show the number of times it has been said.<br> 
 <img src="./image/vis12.png" alt="image" width="500"/><br><br>
-Clicking on the word will open a word trie that shows sentences that follow that word in the transcript. It essentially autocompletes the word and hovering over the word will show a pie chart of which characters used that word. 
+Clicking on the word will open a word trie that shows sentences that follow that word in the transcript. It essentially autocompletes the word and hovering over the word will show a pie chart of which characters used that word.<br> 
 <img src="./image/vis13.png" alt="image" width="500"/><br><br>
-The phrases tab contains a table with the most common phases said during the show. 
+The phrases tab contains a table with the most common phases said during the show.<br> 
 <img src="./image/vis14.png" alt="image" width="500"/><br><br>
-The map tab displays a fictional map of Japan that is labeled with the main locations in the show. Clicking on a character will trigger an animation that shows the character's movement on the map throughout the show. 
+The map tab displays a fictional map of Japan that is labeled with the main locations in the show. Clicking on a character will trigger an animation that shows the character's movement on the map throughout the show.<br> 
 <img src="./image/vis4.png" alt="image" width="500"/><br><br>
-The more info tab contains two pie charts that compare the time spent in thought vs spoken out loud and the dialogue spoken by the selected character vs spoken by the other characters. It also displays the stats for the selected characters (seasons appeared, episodes appeared, and total dialogue). 
+The more info tab contains two pie charts that compare the time spent in thought vs spoken out loud and the dialogue spoken by the selected character vs spoken by the other characters. It also displays the stats for the selected characters (seasons appeared, episodes appeared, and total dialogue).<br> 
 <img src="./image/vis17.png" alt="image" width="500"/><br><br>
 The timeline allows the user to filter the data according to the season and episode number.<br>
 <img src="./image/vis16.png" alt="image" width="500"/><br><br>
@@ -33,7 +33,7 @@ The timeline allows the user to filter the data according to the season and epis
 
 ### Initial Sketches for the overall layout
 ![image](./image/sketches1.png)
-by Jasmine
+by Jasmine<br>
 Shows the character selection on the left, visualization tabs on right, and some mockups of individual visualizations.<br>
 <br>
 ![image](./image/sketches3.png)
@@ -41,13 +41,13 @@ Info button in the bottom left could bring up overlay explaining details about t
 
 ### Unimplemented "Compare Mode"
 ![image](./image/sketches2.png)
-by Jasmine
+by Jasmine<br>
 "Group Mode" (what is implemented) has you look at data from characters in the same scenes while "Compare Mode" would generate two of each visualization to compare and contrast the left-hand side grouping against the left-hand side. This can still be done slighty by opening a word trie, changing your selection to another grouping, and opening a second word trie with the newly filtered data.
 the <em>Demon Slayer</em> series itself.
 
 ### Extra Widgets and visualizations
 ![image](./image/sketches4.png)
-by Samraysh
+by Samraysh<br>
 Initially we wanted to do some analysis on the japanese version of the transcript, but that was found to be out of scope fairly early on. Two of the visualizations in the top right are used in the "More Info" tab in the final visualization.
 
 ## Discoveries
