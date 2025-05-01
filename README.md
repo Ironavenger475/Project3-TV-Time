@@ -14,7 +14,7 @@ For the character selection sidebar, Tulasi parsed the incoming csv data into a 
 ## Visualization Components
 When the user loads the application, they are met with an intro pop up which gives a brief overview of Demon Slayer. It provides the viewer with a summary of the plot, streaming services that it is on, characters, number of seasons and episodes,  and running time. It also provides an description and visual of the main characters, including the primary protagonist and antagonist of the show. 
 <img src="./image/vis2.png" alt="image" width="500"/><br><br>
-When the user clicks continue, they will be taken into the main data view. It is split into two panes with the right pane containing the visualizations that are accessed by clicking the tabs and the left side contains a list of characters. The character list shows images of the characters that have spoken across all episodes. The user can search for a specific character, or order the list alphabetically and by how much the character speaks through out the show. The user can select multiple characters at the same time in order to filter the other visualizations to only include data for the selected characters. 
+When the user clicks continue, they will be taken into the main data view. It is split into two panes with the right pane containing the visualizations that are accessed by clicking the tabs and the left side contains a list of characters. The character list shows images of the characters that have spoken across all episodes. The user can search for a specific character, or order the list alphabetically and by how much the character speaks through out the show. The user can select multiple characters at the same time in order to filter the other visualizations to only include data for the selected characters.<br> 
 <img src="./image/vis11.png" alt="image" width="500"/><br><br>
 On the right side of the application, the first tab contains the word cloud which displays the most commonly used words based on the size. Hovering over a word will show the number of times it has been said. 
 <img src="./image/vis12.png" alt="image" width="500"/><br><br>
@@ -26,7 +26,7 @@ The map tab displays a fictional map of Japan that is labeled with the main loca
 <img src="./image/vis4.png" alt="image" width="500"/><br><br>
 The more info tab contains two pie charts that compare the time spent in thought vs spoken out loud and the dialogue spoken by the selected character vs spoken by the other characters. It also displays the stats for the selected characters (seasons appeared, episodes appeared, and total dialogue). 
 <img src="./image/vis17.png" alt="image" width="500"/><br><br>
-The timeline allows the user to filter the data according to the season and episode number.
+The timeline allows the user to filter the data according to the season and episode number.<br>
 <img src="./image/vis16.png" alt="image" width="500"/><br><br>
 
 ## <div id="sketches">Design Sketches and Justifications</div>
